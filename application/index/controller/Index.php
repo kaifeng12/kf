@@ -1,11 +1,17 @@
 <?php
 namespace app\index\controller;
 
-class Index
+use controller\BaseIndex;
+use think\Db;
+use think\App;
+
+
+class Index extends BaseIndex
 {
     public function index()
     {
-        dump('你们好');
+        $str=$this->test();
+        dump($str);
     }
 
     public function hello($name = 'ThinkPHP5')
