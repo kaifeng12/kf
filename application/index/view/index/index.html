@@ -1,0 +1,57 @@
+﻿{extend name="index@public/base"}
+{block name="script"}
+	<script src="static/index/js/responsiveslides.js"></script>
+	<script>
+    $(function () {
+    	$("#slider").responsiveSlides({
+        auto: true,
+        pager: true,
+        nav: true,
+        speed: 500,
+        maxwidth: 960,
+        namespace: "centered-btns"
+      });
+    });
+	$().ready(function(e) {
+		var module='{url("$module")}';
+        $('article').bind('click',function(){
+			
+			location.href='{url("$module/log/read")}/id/'+this.id;
+		});
+		$('.button').bind('click',function(e){
+			if(this.name=='0') this.href='{url("$module/log/log")}';	
+
+			if(this.name=='1') this.href='{url("$module/log/log")}';
+				
+			e.stopPropagation();
+		});
+    });
+  </script>
+{/block}    
+	
+<!--------------Content--------------->
+
+{block name="content"}		
+			<div class="main-content col11">
+            {//********************文章循环开始**********************************}
+				{foreach $logs as $vo}
+				<article id="{$vo['id']}">
+					<div class="heading">
+						<h2><a href="#">{$vo['title']}</a></h2>
+						<p class="info"> - {$vo['author']} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发表于  {$vo['date']} </p>
+					</div>
+					<div class="content">
+						<img src="{$vo['cover']}"/>
+						<p>{$vo['des']}</p>
+					</div>
+					<div class="footer">
+						<p class="more"><a class="button" href="#" name="{$vo['type']}">更多 >></a></p>
+					</div>
+				</article>
+               {/foreach}
+                {//********************文章循环结束**********************************}
+			</div>
+{/block}       
+			
+</body></html>
+{/block}

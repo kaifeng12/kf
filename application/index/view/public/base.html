@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]--><head>
+
+    <!-- Basic Page Needs
+  ================================================== -->
+	<meta charset="utf-8">
+	<title>博客</title>
+	<meta name="keywords" content="php,凯峰个人博客">
+	<meta name="description" content="凯峰的个人博客，学习分享php技巧">
+	<meta name="author" content="">
+	<link href="static/index/images/ico.ico" rel="shortcut icon">
+    
+    <!-- Mobile Specific Metas
+  ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <!-- CSS
+  ================================================== -->
+	<link rel="stylesheet" href="static/index/css/zerogrid.css">
+	<link rel="stylesheet" href="static/index/css/style.css">
+	<link rel="stylesheet" href="static/index/css/responsiveslides.css" />
+	<link rel="stylesheet" href="static/index/css/responsive.css">
+	
+
+	<script src="static/plugs/jquery/jquery.js"></script>	
+	
+	{block name="script"}{/block}
+    
+</head>
+<body>
+
+<header> 
+	<div class="zerogrid">
+		<div class="row">
+			<div class="col05">
+				<div id="logo"><a href=""><img src="static/index/images/logo.png"/></a></div>
+			</div>
+			<div class="col06 offset05">
+			   <div id='search-box'>
+				  <form action='{:url("index/log/find")}' id='search-form' method='post' >
+					<input id='search-text' name='l_title' placeholder='文章标题' type='text'/>
+
+                    <button id='search-button' type='submit'><span>搜素文章</span></button>
+				  </form>
+				</div>
+			</div>
+		</div>
+	</div>
+</header>
+
+
+<nav>
+	<ul>
+		<li><a href="{:url('index')}}">主页</a></li>
+		<li><a href="{:url('index/log/log')}}">生活日志</a></li>
+		<li><a href="{:url('index/log/talk')}">技术杂谈</a></li>
+		<li><a href="{:url('index/msg/msg')}">留言板</a></li>
+		<li><a href="{:url('index/photo/photo')}">相册</a></li>
+	</ul>
+</nav>
+
+	
+
+<section id="content">
+	<div class="zerogrid">
+		<div class="row block">
+			
+			<div class="featured col16">
+				<div class="rslides_container">
+					<ul class="rslides" id="slider">
+						<li><img src="static/index/images/1.jpg"/></li>
+						<li><img src="static/index/images/2.jpg"/></li>
+						<li><img src="static/index/images/3.jpg"/></li>
+						<li><img src="static/index/images/4.jpg"/></li>
+					</ul>
+				</div>
+			</div>
+		
+			{block name="content"}内容{/block}
+			
+			
+            <div class="sidebar col05">
+            {//********************博主介绍*****************************************}
+				<section>
+					<div class="content">
+						<img src="static/index/images/head.jpg" width="80" height="80"/>
+						<div style="margin-left:20px;display:inline-block ">李凯峰<br>
+						性别：男<br>
+                        生日：95年<br>
+                        爱好：篮球、php<br><br>
+                        </div>
+                        <div>每个从年轻步入成熟时的人都会或多或少的感到迷茫，我所要做的就是，找准目标并坚定地朝这个目标努力。</div>
+                        
+					</div>
+				</section>
+            {//********************博主介绍结束*****************************************}
+            
+            {//********************最新文章开始*****************************************}
+				<section>
+					<div class="heading">最新文章</div>
+					<div class="content">
+						<!--循环-->
+						{foreach $logs as $vo}
+						<section style=" border-bottom:#633 dashed 1px">
+							<img src="{$vo['cover']}"/ width="40" height="40" style="float:left">
+							<h4 style="float:left;width:188px">
+                          <a href="{:url('index/log/read')}/id/{$vo['id']}">{$vo['title']}</a>
+                          	</h4>
+							<p style="float:left">
+                            <a href="{:url('index/log/read')}/id/{$vo['id']}">{$vo['des']}</a>
+                            </p>
+                            <div class="clear"></div>
+						</section>
+						{/foreach}
+                    
+					</div>
+				</section>
+            {//********************最新文章结束*****************************************}
+                
+				<section>
+					<div class="heading">留言板</div>
+					<div class="content" style="padding:5px">
+                    {//****************留言循环开始***************}
+					{foreach $msgs as $vo}
+                    <div class="msg">
+						<div class="qhead" style=" background-image:url({$vo['head']});"></div><!--头像-->
+						<div class="qq">
+                        	<div class="qnetname">{$vo['name']}</div>
+                        	<div class="qdate">{$vo['date']}</div>
+                        	<div class="qtext">{$vo['text']}</div>
+                            <div class="clear"></div>
+						</div>
+                        <div class="clear"></div>
+                    </div>
+					{/foreach}
+                    {//****************留言循环结束***************}
+                    </div>
+				</section>
+			</div>
+
+
+		</div>
+	</div>
+</section>
+
+<div id="copyright">
+	<p>Copyright © 2017 likaifeng.com | 粤ICP备17148858号 </p>
+</div>
+
+</body></html>

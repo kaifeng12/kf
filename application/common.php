@@ -65,6 +65,26 @@ function decode($string)
 }
 
 /**
+ * 把数组内时间戳修改为'Y-m-d'等模式
+ * @param array $arr    二维数组
+ * @param string $key   数组内时间字段名
+ * @param number $type  0(默认)修改为'Y-m-d',1则修改为'Y-m-d H:i:s'
+ * @return array        返回修改后的数组
+ */
+function changDate($arr,$key,$type=0){
+    $i=0;
+    foreach ($arr as $v){
+        if($type==0){
+            $arr[$i][$key]=date('Y-m-d',$v[$key]);
+        }elseif ($type==1){
+            $arr[$i][$key]=date('Y-m-d H:i:s',$v[$key]);
+        }
+        $i++;
+    }
+    return $arr;
+}
+
+/**
  * 调试函数
  *
  */

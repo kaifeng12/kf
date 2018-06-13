@@ -3,30 +3,24 @@ namespace controller;
 
 use think\Controller;
 use think\Db;
+use think\console\command\make\Model;
 
 class BaseIndex extends Controller {
     
-    /**
-     * 获得页面右边的数据信息
-     * @param string $type
-     * @return \Model\LogModel|\Model\MsgModel|\Model\PhotoModel
-     */
-    protected function listRight($type='log'){
-        $log=new \Model\LogModel();
-        $new=$log->getNewLog(3);
-        
-        $msg=new \Model\MsgModel();
-        $msgs=$msg->getMainMsg();
-        
-        $this->assign('msgs',$msgs);
-        $this->assign('new',$new);
-        if($type=='log') return $log;
-        elseif($type=='msg') return $msg;
-        elseif ($type=='photo') return new \Model\PhotoModel();
-        
-
-
+    
+    public function initialize()
+    {   
+        $request=app('request');
+        list($module, $controller, $action) = [$request->module(), $request->controller(), $request->action()];
+        //获得页面右边的数据信息
+        $log=model('log')->getNewLog(3);
+        $msg=model('msg')->getMainMsg();
+        $this->assign('msgs',$msg);
+        $this->assign('new',$log);
+        $this->assign('module',$module);
+        $this->assign('classuri',$module.'/'.$controller);
     }
+    
     
     protected function test()
     {

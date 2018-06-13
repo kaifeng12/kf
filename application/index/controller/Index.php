@@ -9,9 +9,11 @@ use think\App;
 class Index extends BaseIndex
 {
     public function index()
-    {
-        $str=$this->test();
-        dump($str);
+    {   
+
+        $log=model('log');
+        $logs=$log->getNewLog(5,0);
+        return $this->fetch('',['logs'=>$logs]);  
     }
 
     public function hello($name = 'ThinkPHP5')
