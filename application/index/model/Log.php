@@ -8,9 +8,9 @@ class Log extends Model
 {   
     
     /**
-     * 获得指定条数的最新文章或最热文章
-     * @param int $new 默认1获得最新文章，0获得最热文章
+     * 获得指定条数的最新文章或最热文章 
      * @param int $num  要获得的文章数
+     * @param int $new 默认1获得最新文章，0获得最热文章
      * @param int $type  0（默认）全部，1返回生活日志，2返回技术杂谈
      * @return mixed    成功返回文章数组array,失败返回false
      */
@@ -34,7 +34,7 @@ class Log extends Model
             }
         }
         if(!$logs) return false;
-        $logs=changDate($logs,'date');
+        changDate($logs,'date');
         return $logs;
     }
 }

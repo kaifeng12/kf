@@ -1,0 +1,35 @@
+﻿{extend name="index@public/base"}
+{block name="css"}
+	<link rel="stylesheet" href="__STATIC__/index/css/responsiveslides.css" />
+{/block}
+{block name="script"}
+	<script src="__STATIC__/index/js/responsiveslides.js"></script>
+    <script>
+		$().ready(function(e) {
+		    $('article').bind('click',function(){
+				top.location.href='{:url("log/read","","")}/id/'+this.id+'.html';
+			});
+		});
+    </script>
+{/block}
+{block name="content"}
+			<div class="main-content col11">
+                        <img src="__STATIC__/index/images/notalk.jpg" >
+            {//********************文章循环开始**********************************}
+				{foreach $logs as $vo}
+				<article id="{$vo.id}">
+					<div class="heading">
+						<h2><a href="#">{$vo.title}</a></h2>
+						<p class="info"> - {$vo.author} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发表于  {$vo.date} </p>
+					</div>
+					<div class="content">
+						<img src="{$vo.cover}"/>
+						<p>{$vo.des}</p>
+					</div>
+                    
+				</article>
+                {/foreach}
+                {//********************文章循环结束**********************************}
+			</div>
+{/block}
+{/block}

@@ -1,0 +1,32 @@
+{extend name="index@public/base"}
+{block name="css"}
+    <link rel="stylesheet" href="__STATIC__/index/css/responsiveslides.css" />
+    <link rel="stylesheet" href="__STATIC__/index/css/photo.css">
+{/block}
+{block name="script"}
+    <script src="__STATIC__/index/js/msg.js"></script>
+{/block}
+{block name="content"}
+			<div class="main-content col11">
+                
+                <div class='photo'>
+                    {foreach $group as $vo}
+                    <div class="pgroup" id="{$vo.id}">
+                        <a href="{:url('showPhoto','id='.$vo.id)}">
+                        <img src="{$vo.cover}" width="100" height="100" >
+                        </a>
+                        <div >
+                            <a href="{:url('showPhoto','id='.$vo.id)}" >
+                            	{$vo.name}
+                            </a>
+                        </div>
+                    </div>
+                    {/foreach}
+                
+                	<div class="clear"></div>
+                </div>
+                
+			</div>
+{/block}
+{/block}
+

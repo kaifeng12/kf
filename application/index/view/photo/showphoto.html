@@ -1,0 +1,30 @@
+﻿{extend name="index@public/base"}
+{block name="css"}
+	<link rel="stylesheet" href="__STATIC__/index/css/responsiveslides.css" />
+	<link rel="stylesheet" href="__STATIC__/index/css/photo.css">
+{/block}
+{block name="script"}
+    <script>
+	var action="{:url('photolist')}";
+	var json={$ph|raw};
+	var group={$gid};
+    </script>
+    <script src="__STATIC__/index/js/photo.js"></script>
+{/block}
+{block name="content"}
+			<div class="main-content col11">
+            	<div class="bigimg">
+                	<img src="" id="im">
+                </div>
+                <div class="thumbs" name='1'>
+                    <img src="__STATIC__/admin/images/prev.jpg" style="float:left;" >
+                    <div class="thumb"></div>
+                    <div class="thumb"></div>
+                    <div class="thumb"></div>
+                    <div class="thumb"></div>
+                    <div class="thumb"></div>
+                    <img src="__STATIC__/admin/images/next.jpg" style="float:right;" >
+    			</div> 
+			</div>
+{/block}
+{/block}

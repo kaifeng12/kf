@@ -71,31 +71,21 @@ function decode($string)
  * @param number $type  0(默认)修改为'Y-m-d',1则修改为'Y-m-d H:i:s'
  * @return array        返回修改后的数组
  */
-function changDate($arr,$key,$type=0){
-    $i=0;
-    foreach ($arr as $v){
-        if($type==0){
-            $arr[$i][$key]=date('Y-m-d',$v[$key]);
-        }elseif ($type==1){
-            $arr[$i][$key]=date('Y-m-d H:i:s',$v[$key]);
-        }
-        $i++;
+function changDate(&$arr,$key,$type=0){
+    if(!is_array($arr)) return false;
+    if(isset($arr[$key])){
+        $type==0 && $arr[$key]=date('Y-m-d',$arr[$key]);
+        $type==1 && $arr[$key]=date('Y-m-d H:i:s',$arr[$key]);
+        return ;
     }
-    return $arr;
+    foreach ($arr as &$v){
+        if($type==0){
+            $v[$key]=date('Y-m-d',$v[$key]);
+        }elseif ($type==1){
+            $v[$key]=date('Y-m-d H:i:s',$v[$key]);
+        }
+    }
+    //return $arr;
 }
 
-/**
- * 调试函数
- *
- */
-function dump($var,$type=1)
-{
-    echo '<pre>';
-    if($type==1){
-        var_dump($var);
-        exit;
-    }elseif ($type=='0'){
-        var_dump($var);
-    }
-}
 

@@ -1,6 +1,9 @@
 ﻿{extend name="index@public/base"}
+{block name="css"}
+	<link rel="stylesheet" href="__STATIC__/index/css/responsiveslides.css" />
+{/block}
 {block name="script"}
-	<script src="static/index/js/responsiveslides.js"></script>
+	<script src="__STATIC__/index/js/responsiveslides.js"></script>
 	<script>
     $(function () {
     	$("#slider").responsiveSlides({
@@ -13,15 +16,14 @@
       });
     });
 	$().ready(function(e) {
-		var module='{url("$module")}';
         $('article').bind('click',function(){
 			
-			location.href='{url("$module/log/read")}/id/'+this.id;
+			location.href='{:url("log/read","","")}/id/'+this.id+'.html';
 		});
 		$('.button').bind('click',function(e){
-			if(this.name=='0') this.href='{url("$module/log/log")}';	
+			if(this.name=='0') this.href='{:url("log/log")}';	
 
-			if(this.name=='1') this.href='{url("$module/log/log")}';
+			if(this.name=='1') this.href='{:url("log/log")}';
 				
 			e.stopPropagation();
 		});
@@ -31,7 +33,18 @@
 	
 <!--------------Content--------------->
 
-{block name="content"}		
+{block name="content"}	
+			<div class="featured col16">
+				<div class="rslides_container">
+					<ul class="rslides" id="slider">
+						<li><img src="__STATIC__/index/images/1.jpg"/></li>
+						<li><img src="__STATIC__/index/images/2.jpg"/></li>
+						<li><img src="__STATIC__/index/images/3.jpg"/></li>
+						<li><img src="__STATIC__/index/images/4.jpg"/></li>
+					</ul>
+				</div>
+			</div>
+
 			<div class="main-content col11">
             {//********************文章循环开始**********************************}
 				{foreach $logs as $vo}

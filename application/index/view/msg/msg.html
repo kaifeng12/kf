@@ -1,0 +1,99 @@
+﻿{extend name="index@public/base"}
+{block name="css"}
+    <link rel="stylesheet" href="__STATIC__/index/css/responsiveslides.css" />
+    <link rel="stylesheet" type="text/css" media="screen and (max-width: 999px)" href="__STATIC__/index/css/phonemsg.css" />
+    <link rel="stylesheet" href="__STATIC__/index/css/msg.css" media="screen and (min-width: 1000px)" />
+{/block}
+{block name="script"}
+    <script src="__STATIC__/index/js/msg.js"></script>
+{/block}
+{block name="content"}
+    <div class="main-content col11">
+                
+{//*************************************留言开始*******************************}
+        <div class="msgs">
+            {//*************************发表留言**************}
+            <div class="fabiao">
+                <img src="__STATIC__/index/images/shuosha1.jpg">
+                {if $login == 1}
+                <div class="sma_yuan" style=" background-image:url({$qhead});border-radius:50%; width:40px; height:40px; background-size:cover;display:inline-block;">
+                    <span style="display:none"></span>
+                </div>
+                <a class='logout' href="javascript:void(0)" data-url="{:url('logout','','',true)}">                
+                    <div style="padding-top:20px; display:inline-block">退出登录</div>
+                </a>
+                {else /} 
+                <img src="__STATIC__/index/images/qlogin.png" style="border-radius:50%; width:40px; height:40px; background-size:cover;" >
+                <a href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101450092&redirect_uri=http://www.likaifeng.xyz/Home/Msg/callback?state=1200">       
+                    <div style="padding-top:20px; display:inline-block">用qq登录评论</div>
+                </a>
+                {/if}
+                    
+            </div>
+            <div>
+                <div class="liu" >
+                    <form action="{:url('add')}" method="post" id="form">
+                    <div class="inp" style="padding-top:10px">
+                        <textarea name="text"></textarea>
+                        <input type="hidden" name="rid" value="0">
+                    </div>
+                    </form>
+                    <div class="liuyan" ></div>         {//发表留言按钮**}
+                </div> 
+                {//*************************发表留结束言**************}           
+            </div>
+            {foreach $msgss as $vo}
+            {//************************一级回复板块********************-->}
+            <div class="mag">
+                <div class="boss">
+                    <div class="yuan" style=" background-image:url({$vo.head});"></div>{//头像**}
+                    <div class="hname">{$vo.name}</div>                
+                    <div class="rtime">{$vo.date}</div>
+                    <a class="hf">回复</a>
+                </div>
+                <div class="res">{$vo.text}</div>{//一级回复内容**}
+                
+                
+                {//**********************回复框*******************}
+                <div class="hui" style="width:99%;float:left; border-top:#847542 dashed 1px;display:none">
+                    <form action="{:url('add')}" method="post" id="form">
+                    <div class="inp">
+                        <textarea name="text"></textarea>
+                        <input type="hidden" name="rid" value="{$vo.id}">
+                    </div>
+                    </form>
+                    <div class="huifu"></div>           {//发表留言按钮**}
+                </div>
+                {//**********************回复框结束******************}   
+                {if $vo.res !== []}         
+                {foreach $vo.res as $va}
+                {//*****************二级回复板块*******************}
+                <div class="reply">
+                    <div class="boss2" >
+                        <div class="yuan" style=" background-image:url({$va.head});"></div>{//头像**}
+                        <div class="hname">{$va.name}</div>                
+                        <div class="rtime">{$va.date}</div>
+                        
+                        <div class="clear"></div>
+                    </div>
+                    <div class="res2">{$va.text}</div>
+                </div>
+                {//*****************二级回复板块结束*******************}
+                {/foreach}
+                {/if}
+                
+                <div class="clear" style="border-bottom:#847542 dashed 1px"></div>
+            </div>    
+        {//**********************一级回复板块结束**********************}
+            {/foreach}
+
+            <div class="clear"></div>     
+        </div>
+{//**************************************留言结束************************************}                
+                
+                
+                
+    </div>  
+{/block}
+{/block}
+

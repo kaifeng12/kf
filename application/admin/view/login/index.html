@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+	<meta charset="utf-8">
+	<title>Retina Dashboard</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="robots" content="" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel="stylesheet" href="__STATIC__/admin/css/style.css" media="all" />
+	<!--[if IE]><link rel="stylesheet" href="css/ie.css" media="all" /><![endif]-->
+	<script type="text/javascript" src="__STATIC__/plugs/jquery/jquery.js"></script>
+	<script>
+		var controller="{:url('@admin/login','','')}";
+		var module = "{:url('@admin','','')}";
+    </script>	
+	<script type="text/javascript" src="__STATIC__/admin/js/login.js"></script>
+
+</head>
+<body class="login">
+	<section>
+		<img src="__STATIC__/admin/images/logo.png"
+		<form method="post" action="__CONTROLLER__/home">
+			<input type="text"  placeholder="用户名" name="uname" />	
+            <div class="umsg">*用户名不能为空</div>
+			<input  type="password" placeholder="密码" name="pwd" />
+            <div class="pmsg">*密码不能为空</div>	
+            <div class="capt">
+            <input type="text" placeholder="验证码" name="captchar" style="width:120px; float:left" ><img src="{:captcha_src()}" ></div>
+			<input type="button" class="blue" value="Login" />
+			
+		</form>
+		<p align="right"><a href="#">忘记密码？</a></p>
+	</section>
+	
+</body>
+</html>

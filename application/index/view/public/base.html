@@ -11,7 +11,7 @@
 	<meta name="keywords" content="php,凯峰个人博客">
 	<meta name="description" content="凯峰的个人博客，学习分享php技巧">
 	<meta name="author" content="">
-	<link href="static/index/images/ico.ico" rel="shortcut icon">
+	<link href="__STATIC__/index/images/ico.ico" rel="shortcut icon">
     
     <!-- Mobile Specific Metas
   ================================================== -->
@@ -19,13 +19,12 @@
     
     <!-- CSS
   ================================================== -->
-	<link rel="stylesheet" href="static/index/css/zerogrid.css">
-	<link rel="stylesheet" href="static/index/css/style.css">
-	<link rel="stylesheet" href="static/index/css/responsiveslides.css" />
-	<link rel="stylesheet" href="static/index/css/responsive.css">
-	
+	<link rel="stylesheet" href="__STATIC__/index/css/zerogrid.css">
+	<link rel="stylesheet" href="__STATIC__/index/css/style.css">
+	<link rel="stylesheet" href="__STATIC__/index/css/responsive.css">
+	{block name="css"}{/block}
 
-	<script src="static/plugs/jquery/jquery.js"></script>	
+	<script src="__STATIC__/plugs/jquery/jquery.js"></script>	
 	
 	{block name="script"}{/block}
     
@@ -36,12 +35,12 @@
 	<div class="zerogrid">
 		<div class="row">
 			<div class="col05">
-				<div id="logo"><a href=""><img src="static/index/images/logo.png"/></a></div>
+				<div id="logo"><a href=""><img src="__STATIC__/index/images/logo.png"/></a></div>
 			</div>
 			<div class="col06 offset05">
 			   <div id='search-box'>
-				  <form action='{:url("index/log/find")}' id='search-form' method='post' >
-					<input id='search-text' name='l_title' placeholder='文章标题' type='text'/>
+				  <form action='{:url("log/find")}' id='search-form' method='post' >
+					<input id='search-text' name='title' placeholder='文章标题' type='text'/>
 
                     <button id='search-button' type='submit'><span>搜素文章</span></button>
 				  </form>
@@ -54,11 +53,11 @@
 
 <nav>
 	<ul>
-		<li><a href="{:url('index')}}">主页</a></li>
-		<li><a href="{:url('index/log/log')}}">生活日志</a></li>
-		<li><a href="{:url('index/log/talk')}">技术杂谈</a></li>
-		<li><a href="{:url('index/msg/msg')}">留言板</a></li>
-		<li><a href="{:url('index/photo/photo')}">相册</a></li>
+		<li><a href="{:url('index/index')}">主页</a></li>
+		<li><a href="{:url('log/log')}">生活日志</a></li>
+		<li><a href="{:url('log/talk')}">技术杂谈</a></li>
+		<li><a href="{:url('msg/msg')}">留言板</a></li>
+		<li><a href="{:url('photo/index')}">相册</a></li>
 	</ul>
 </nav>
 
@@ -68,16 +67,6 @@
 	<div class="zerogrid">
 		<div class="row block">
 			
-			<div class="featured col16">
-				<div class="rslides_container">
-					<ul class="rslides" id="slider">
-						<li><img src="static/index/images/1.jpg"/></li>
-						<li><img src="static/index/images/2.jpg"/></li>
-						<li><img src="static/index/images/3.jpg"/></li>
-						<li><img src="static/index/images/4.jpg"/></li>
-					</ul>
-				</div>
-			</div>
 		
 			{block name="content"}内容{/block}
 			
@@ -86,7 +75,7 @@
             {//********************博主介绍*****************************************}
 				<section>
 					<div class="content">
-						<img src="static/index/images/head.jpg" width="80" height="80"/>
+						<img src="__STATIC__/index/images/head.jpg" width="80" height="80"/>
 						<div style="margin-left:20px;display:inline-block ">李凯峰<br>
 						性别：男<br>
                         生日：95年<br>
@@ -103,14 +92,14 @@
 					<div class="heading">最新文章</div>
 					<div class="content">
 						<!--循环-->
-						{foreach $logs as $vo}
+						{foreach $new as $vo}
 						<section style=" border-bottom:#633 dashed 1px">
 							<img src="{$vo['cover']}"/ width="40" height="40" style="float:left">
 							<h4 style="float:left;width:188px">
-                          <a href="{:url('index/log/read')}/id/{$vo['id']}">{$vo['title']}</a>
+                          <a href="{:url('log/read','id='.$vo.id)}">{$vo['title']}</a>
                           	</h4>
 							<p style="float:left">
-                            <a href="{:url('index/log/read')}/id/{$vo['id']}">{$vo['des']}</a>
+                            <a href="{:url('log/read','id='.$vo.id)}">{$vo['des']}</a>
                             </p>
                             <div class="clear"></div>
 						</section>
@@ -147,7 +136,7 @@
 </section>
 
 <div id="copyright">
-	<p>Copyright © 2017 likaifeng.com | 粤ICP备17148858号 </p>
+	<p>Copyright © {:date('Y')}  likaifeng.xyz | 粤ICP备17148858号 </p>
 </div>
 
 </body></html>

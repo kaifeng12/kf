@@ -13,6 +13,10 @@
 // | 模板设置
 // +----------------------------------------------------------------------
 
+// 模板常量声明
+$appRoot = app('request')->root(true);
+$uriRoot = rtrim(preg_match('/\.php$/', $appRoot) ? dirname($appRoot) : $appRoot, '\\/');
+
 
 return [
     // 模板引擎类型 支持 php think 支持扩展
@@ -33,5 +37,9 @@ return [
     'taglib_begin' => '{',
     // 标签库标签结束标记
     'taglib_end'   => '}',
+    // 定义模板替换字符串
+    'tpl_replace_string' => [
+        '__STATIC__' => $uriRoot. "/static",
+    ],
 
 ];

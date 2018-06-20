@@ -17,15 +17,9 @@ class BaseIndex extends Controller {
         $msg=model('msg')->getMainMsg();
         $this->assign('msgs',$msg);
         $this->assign('new',$log);
-        $this->assign('module',$module);
-        $this->assign('classuri',$module.'/'.$controller);
+
     }
     
-    
-    protected function test()
-    {
-        return '123';
-    }
     
 
 }
