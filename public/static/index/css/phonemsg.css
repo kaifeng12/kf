@@ -1,0 +1,32 @@
+.zerogrid{ width:85%}
+.main-content{width:100%}
+.msgs{ width:100%; background:#FFF; padding-bottom:20px; border-bottom:#847542 1px dashed; }
+.main-content.col11{ width:330px}
+
+
+
+/*留言框*/
+.liu{float:left; width:100%; padding-bottom:20px}
+.liuyan{ float:right; background-image:url(/static/index/images/liuyan.png); background-repeat:no-repeat; background-position:center; text-align:center;width:78px; height:36px;}
+.inp{ width:100%; height:80px; float:left;background-image:url(/static/index/images/input_min.jpg); background-repeat:no-repeat; background-position:center; padding:12px 0px 0px 0px;}
+.inp textarea{ border:none; width:90%; height:85%;resize:none;overflow: auto; margin-left:5% }
+
+
+
+/**一级回复**/
+mag{width:100%; }
+.boss{ padding-top:20px; width:100%; float:left; border-top:#847542 dashed 2px;}
+.yuan{border-radius:50%; width:40px; height:40px; background-size:cover;float:left;}
+.hname{ padding-left:10px;  float:left; font-size:14px;color:#847542}
+.mag a{float:right;font-size:12px; color:#999; padding-right:10px}
+.rtime{ float:right;font-size:12px;color:#847542;}
+.res{ float:left; padding:10px 0px 0px 50px; font-size:12px; line-height:20px; padding-bottom:10px;  }
+
+
+.huifu{ float:right; background-image:url(/static/admin/images/huifu.png); background-repeat:no-repeat; background-position:center; text-align:center;width:78px; height:26px;padding:0px 00px 10px 0px;}	
+
+
+/**二级回复**/
+.reply{ float:left; padding:10px 10px 0px 0px;width:84%;border-top:#847542 1px dashed;margin-left:50px }
+.boss2{ float:left; width:100%}
+.res2{ float:left; padding:0px 20px 0px 50px; font-size:12px; line-height:20px; padding-bottom:5px;   }

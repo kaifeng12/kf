@@ -1,0 +1,24 @@
+
+
+.msgs{ width:640px; background:#FFF; margin:20px auto;box-shadow: 0px 0px 6px #000; padding-bottom:50px}
+/**一级回复**/
+mag{  float:left; width:648px }
+.boss{ padding:20px 20px 0px 20px; float:left; width:95%}
+.tou{width:50px; height:50px; }
+.yuan{border-radius:50%; width:50px; height:50px; background-size:cover; float:left }
+.hname{ padding-left:20px; padding-top:5px; float:left; font-size:14px;color:#847542}
+.mag a{float:right;font-size:14px; padding:5px 20px 0px 0px; cursor:pointer; color:#999}
+.mag a:hover{ color:#847542}
+.rtime{ float:right;font-size:14px;color:#847542; padding-top:5px}
+.res{ float:left; padding:0px 20px 0px 90px; font-size:15px; line-height:20px; padding-bottom:20px;  }
+
+/**回复框**/
+.inp{ width:598px; height:111px; float:left;background-image:url(/Public/Admin/images/input.jpg); background-repeat:no-repeat; background-position:center; padding:12px 0px 0px 42px;}
+.huifu{ float:right; background-image:url(/Public/Admin/images/huifu.png); background-repeat:no-repeat; background-position:center; text-align:center;width:78px; height:26px;padding:0px 40px 10px 0px; cursor:pointer;}
+.inp textarea{ border:none; width:97%; height:90%;resize:none; }
+
+/**二级回复**/
+.reply{ float:left; padding:10px 10px 0px 0px;width:84%;border-top:#847542 1px dashed; margin-left:90px}
+.boss2{ padding:0px 0px 0px 0px; float:left; width:100%}
+.res2{ float:left; padding:0px 20px 0px 70px; font-size:15px; line-height:20px; padding-bottom:5px; width:538px  }
+

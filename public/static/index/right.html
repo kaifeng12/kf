@@ -1,0 +1,61 @@
+			<script src="__PUBLIC__/Home/js/right.js"></script>
+            <div class="sidebar col05">
+            {//********************博主介绍*****************************************}
+				<section>
+					<div class="content">
+						<img src="__PUBLIC__/Home/images/head.jpg" width="80" height="80"/>
+						<div style="margin-left:20px;display:inline-block ">李凯峰<br>
+						性别：男<br>
+                        生日：95年<br>
+                        爱好：篮球、php<br><br>
+                        </div>
+                        <div>每个从年轻步入成熟时的人都会或多或少的感到迷茫，我所要做的就是，找准目标并坚定地朝这个目标努力。</div>
+                        
+					</div>
+				</section>
+            {//********************博主介绍结束*****************************************}
+            
+            {//********************最新文章开始*****************************************}
+				<section>
+					<div class="heading">最新文章</div>
+					<div class="content">
+                    	<volist name='new' id='vo'>
+						<section style=" border-bottom:#633 dashed 1px">
+							<img src="{$vo['l_cover']}"/ width="40" height="40" style="float:left">
+							<h4 style="float:left;width:188px">
+                          <a href="__MODULE__/Log/read/id/{$vo['l_id']}">{$vo['l_title']}</a>
+                          	</h4>
+							<p style="float:left">
+                            <a href="__MODULE__/Log/read/id/{$vo['l_id']}">{$vo['l_des']}</a>
+                            </p>
+                            <div class="clear"></div>
+						</section>
+                        </volist>
+                    
+					</div>
+				</section>
+            {//********************最新文章结束*****************************************}
+                
+				<section>
+					<div class="heading">留言板</div>
+					<div class="content" style="padding:5px">
+                    {//****************留言循环开始***************}
+                    <volist name='msgs' id='vo'>
+                    <div class="msg">
+						<div class="qhead" style=" background-image:url({$vo['q_head']});"></div><!--头像-->
+						<div class="qq">
+                        	<div class="qnetname">{$vo['q_name']}</div>
+                        	<div class="qdate">{$vo['c_date']}</div>
+                        	<div class="qtext">{$vo['c_text']}</div>
+                            <div class="clear"></div>
+						</div>
+                        <div class="clear"></div>
+                    </div>
+                    </volist>
+                    {//****************留言循环结束***************}
+                    </div>
+				</section>
+
+
+
+			</div>

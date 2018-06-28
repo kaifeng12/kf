@@ -1,0 +1,79 @@
+
+@media only screen and (min-width: 768px) {
+.log{ width:548px;padding:5px; font-size:16px;color:#000;}
+.title{ text-align:center; font-weight:650;font-size:22px;padding-bottom:5px; color:#000}
+.time{ padding-bottom:10px;text-align:center}
+.main-content.col11{background-color:#FFF;border:1px solid #DDDDDD;width:600px;padding:9px 0px 9px 18px; margin:20px}
+
+
+.comment{ width:595px; background:#FFF; margin:20px auto; padding:10px 0px 30px 0px; border-top:#847542 dashed 2px}
+
+/*留言框*/
+.com{float:left; padding-bottom:10px }
+.pinglun{ float:right; background-image:url(/static/index/images/pinglun.png); background-repeat:no-repeat; background-position:center; text-align:center;width:78px; height:26px;padding:0px 60px 0px 0px; cursor:pointer;}
+
+
+
+/**一级回复**/
+mag{  float:left; width:595px }
+.boss{ padding:20px 20px 0px 20px; float:left; width:93%;border-top:#847542 dashed 1px}
+.yuan{border-radius:50%; width:50px; height:50px; background-size:cover; float:left }
+.hname{ padding-left:20px; padding-top:5px; float:left; font-size:14px;color:#847542}
+.mag a{float:right;font-size:14px; padding:5px 20px 0px 0px; cursor:pointer; color:#999}
+.mag a:hover{ color:#847542}
+.rtime{ float:right;font-size:14px;color:#847542; padding-top:5px}
+.res{ float:left; padding:0px 20px 0px 90px; font-size:15px; line-height:20px; padding-bottom:20px;  }
+
+/**回复框**/
+.inp{ width:573px; height:111px; float:left;background-image:url(/static/index/images/p_input.jpg); background-repeat:no-repeat; background-position:center; padding:16px 0px 0px 35px;}
+.huifu{ float:right; background-image:url(/static/admin/images/huifu.png); background-repeat:no-repeat; background-position:center; text-align:center;width:78px; height:26px;padding:0px 40px 10px 0px; cursor:pointer;}
+.inp textarea{ border:none; width:94%; height:83%;resize:none;overflow: auto; }
+
+/**二级回复**/
+.reply{ float:left; padding:10px 10px 0px 0px;width:82%;border-top:#847542 1px dashed; margin-left:90px}
+.boss2{ padding:0px 0px 0px 0px; float:left; width:100%}
+.res2{ float:left; padding:0px 20px 0px 70px; font-size:15px; line-height:20px; padding-bottom:5px; width:538px  }
+}
+
+@media only screen and (max-width: 768px) {
+	.zerogrid{ width:85%}
+	.main-content.col11{ width:100%;border-bottom:#847542 dashed 2px}
+	.log{ width:90%;padding:5px; font-size:14px;color:#000;}
+	.title{ text-align:center; font-weight:650;font-size:18px;padding-bottom:5px; color:#000}
+	.time{ padding-bottom:10px;text-align:center}
+	
+	.comment{ width:100%; background:#FFF; margin:20px auto; padding:0px 0px 30px 0px;
+				 border-top:#847542 dashed 1px}
+				 
+		/*留言框*/
+	.com{float:left; width:100%; padding-bottom:20px}
+	.pinglun{ float:right; background-image:url(/static/index/images/liuyan.png); 
+			background-repeat:no-repeat; background-position:center;
+	 		text-align:center;width:78px; height:36px;}
+	.inp{ width:330px; height:80px; float:left; background-repeat:no-repeat;
+		background-image:url(/static/index/images/input_min.jpg); background-position:center; 
+		padding:12px 0px 0px 0px;}
+	.inp textarea{ border:none; width:90%; height:85%;resize:none;overflow: auto;
+		 margin-left:5% }
+	
+
+.huifu{ float:right; background-image:url(/static/admin/images/huifu.png); background-repeat:no-repeat; background-position:center; text-align:center;width:78px; height:26px;padding:0px 00px 10px 0px;}		
+	
+		/**一级回复**/
+	mag{width:100%; }
+	.boss{ padding-top:20px; width:100%; float:left; border-top:#847542 dashed 2px;}
+	.yuan{border-radius:50%; width:40px; height:40px; background-size:cover;float:left;}
+	.hname{ padding-left:10px;  float:left; font-size:14px;color:#847542}
+	.mag a{float:right;font-size:12px; color:#999; padding-right:10px}
+	.rtime{ float:right;font-size:12px;color:#847542;}
+	.res{ float:left; padding:10px 0px 0px 50px; font-size:12px; line-height:20px; 
+			padding-bottom:10px;  }	
+	
+	
+		/**二级回复**/
+	.reply{ float:left; padding:10px 10px 0px 0px;width:84%;border-top:#847542 1px dashed;
+			margin-left:50px }
+	.boss2{ float:left; width:100%}
+	.res2{ float:left; padding:0px 20px 0px 50px; font-size:12px; line-height:20px;
+	 		padding-bottom:5px;   }
+}
