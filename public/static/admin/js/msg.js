@@ -1,10 +1,16 @@
-$().ready(function(e) {
-    $('.hf').toggle(function(){		
-		$(this).parent().next().next().css('display','block');
-		$(this).html('取消回复');
-	},function(){
-		$('.hui').css('display','none');
-		$(this).html('回复');			
+
+$(function() {
+	$('.hf').bind('click',function(){
+		var hui=$(this).parent().next().next();
+		if(hui.css('display')=='none'){
+			$('.hf').html('回复');
+			$('.hui').css('display','none');
+			hui.css('display','block');						
+			$(this).html('取消回复');	
+		}else if(hui.css('display')!=='none'){
+			hui.css('display','none');						
+			$(this).html('回复');	
+		}
 	});
 	
 	$('.huifu').bind('click',function(){

@@ -1,0 +1,74 @@
+{extend name="admin@public/base"}
+
+{block name="css"}
+<link rel="stylesheet" href="__STATIC__/admin/css/msg.css" media="all" />
+{/block}
+
+{block name="content"}  
+<section class="content">
+    <section class="widget">
+        <header>
+            <hgroup>
+                <h2 style="padding-top:5px;color:#009688;" >留言管理</h2>
+            </hgroup>
+        </header>   
+        <div class="msgs">
+        {foreach $msgs as $vo}
+        <!--**********************一级回复板块********************-->
+        <div class="mag">
+            <div class="boss">
+                <div class="yuan" style=" background-image:url({$vo['head']});"></div><!--头像-->
+                <div class="hname">{$vo['name']}</div>                
+                <div class="rtime">{$vo['date']}</div>
+                <a class="hf">回复</a><a id="{$vo['id']}">删除</a>
+            </div>
+            <div class="res">{$vo['text']}</div><!--一级回复内容-->
+            
+            
+            <!--**********************回复框*******************-->
+            <div class="hui" style="float:left; border-top:#847542 dashed 1px;display:none">
+                <form action="{:url('reply')}" method="post" id="form">
+                <div class="inp">
+                    <textarea name="text"></textarea>
+                    <input type="hidden" name="rid" value="{$vo['id']}">
+                </div>
+                </form>
+                <div class="huifu"></div>           <!--发表留言按钮-->
+            </div>
+            <!--**********************回复框结束****************-->   
+            {if $vo.res!==[]}         
+                {foreach $vo.res as $va}
+                <!--*****************二级回复板块*****************-->
+                <div class="reply">
+                    <div class="boss2" >
+                        <div class="yuan" style=" background-image:url({$vo['head']});"></div><!--头像-->
+                        <div class="hname">{$va['name']}</div>                
+                        <div class="rtime">{$va['date']}</div>
+                        <a id="{$va['id']}">删除</a>
+                        <div class="clear"></div>
+                    </div>
+                    <div class="res2">{$va['text']}</div>
+                </div>
+                <!--*****************二级回复板块结束*****************-->
+                {/foreach}
+            {/if}
+            
+            <div class="clear" style="border-bottom:#847542 dashed 1px"></div>
+        </div>    
+        <!--**********************一级回复板块结束********************-->
+        {/foreach}
+
+            <div class="clear"></div>     
+        </div>
+   
+    </section>
+    
+
+</section>
+{/block}
+
+{block name="script"}
+<script src="__STATIC__/admin/js/msg.js"></script>
+{/block}
+
+

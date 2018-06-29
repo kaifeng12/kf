@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>kaifeng•博客</title>
+  <link href="__STATIC__/index/images/ico.ico" rel="shortcut icon">
+  <link rel="stylesheet" href="__STATIC__/plugs/layui/css/layui.css">
+  	{block name="css"}{/block}
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+  <div class="layui-header">
+    <div class="layui-logo">博客后台管理系统</div>
+
+    <ul class="layui-nav layui-layout-right">
+      <li class="layui-nav-item">
+        <a href="javascript:;">
+          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+          贤心
+        </a>
+        <dl class="layui-nav-child">
+          <dd><a href="{:url('admin/pwd_change')}">修改密码</a></dd>
+        </dl>
+      </li>
+      <li class="layui-nav-item"><a href="{:url('admin/logout')}">退出</a></li>
+    </ul>
+  </div>
+  
+  <div class="layui-side layui-bg-black">
+    <div class="layui-side-scroll">
+      <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+      <ul class="layui-nav layui-nav-tree"  lay-filter="test">
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">文章管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="{:url('log/logs')}">生活日志</a></dd>
+            <dd><a href="{:url('log/talk')}">技术杂谈</a></dd>
+          </dl>
+        </li>
+        <li class="layui-nav-item"><a href="{:url('msg/index')}">留言板</a></li>
+        <li class="layui-nav-item"><a href="{:url('photo/index')}">相册</a></li>
+        <li class="layui-nav-item"><a href="{:url('record/index')}">访问统计</a></li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="layui-body">
+    <!-- 内容主体区域 -->
+    	{block name="content"}内容{/block}
+  </div>
+  
+  <div class="layui-footer">
+    <!-- 底部固定区域 -->
+    ©2018 likaifeng.xyz 
+  </div>
+</div>
+<script src="__STATIC__/plugs/jquery/jquery.js"></script>
+<script src="__STATIC__/plugs/layui/layui.all.js"></script>
+<script src="__STATIC__/admin/js/admin.js"></script>
+<script type="text/javascript">
+    var controller="{:url('@'.request()->module().'/'.request()->controller().'','','')}";
+    var module = "{:url('@'.request()->module().'','','')}";
+</script>
+{block name="script"}{/block}
+</body>
+</html>
+
+
+
+
+	
+
+    
+
+		
+
+			
+			
+            

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+	<meta charset="utf-8">
+	<title>右边</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="robots" content="" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="__PUBLIC__/Admin/css/style.css" media="all" />
+<link rel="stylesheet" href="__PUBLIC__/Admin/css/msg.css" media="all" />
+<script src="__PUBLIC__/jquery/jquery.js"></script>
+<script> var controller = '__CONTROLLER__'</script>
+<script src="__PUBLIC__/Admin/js/msg.js"></script>
+</head>
+
+<body>
+
+
+<section class="content">
+	<section class="widget">
+		<header>
+			<span class="icon">&#128200;</span>
+			<hgroup>
+				<h2 style="padding-top:15px" >留言管理</h2>
+			</hgroup>
+		</header>	
+		<div class="msgs">
+        <volist name='msgs' id='vo'>
+        <!--**********************一级回复板块********************-->
+        <div class="mag">
+			<div class="boss">
+        		<div class="yuan" style=" background-image:url({$vo['q_head']});"></div><!--头像-->
+                <div class="hname">{$vo['q_name']}</div>                
+                <div class="rtime">{$vo['c_date']}</div>
+                <a class="hf">回复</a><a id="{$vo['m_id']}">删除</a>
+			</div>
+            <div class="res">{$vo['c_text']}</div><!--一级回复内容-->
+            
+            
+            <!--**********************回复框*******************-->
+            <div class="hui" style="float:left; border-top:#847542 dashed 1px;display:none">
+            	<form action="__CONTROLLER__/reply" method="post" id="form">
+                <div class="inp">
+            		<textarea name="c_text"></textarea>
+                    <input type="hidden" name="r_id" value="{$vo['m_id']}">
+            	</div>
+                </form>
+            	<div class="huifu"></div>			<!--发表留言按钮-->
+            </div>
+            <!--**********************回复框结束****************-->   
+            <if condition="$vo['res'] neq array()">         
+            <foreach name="vo['res']" item="va">
+            <!--*****************二级回复板块*****************-->
+            <div class="reply">
+            	<div class="boss2" >
+            		<div class="yuan" style=" background-image:url({$vo['q_head']});"></div><!--头像-->
+                	<div class="hname">{$va['q_name']}</div>                
+                	<div class="rtime">{$va['c_date']}</div>
+                	<a id="{$va['m_id']}">删除</a>
+                    <div class="clear"></div>
+                </div>
+                <div class="res2">{$va['c_text']}</div>
+            </div>
+            <!--*****************二级回复板块结束*****************-->
+            </foreach>
+            </if>
+            
+            <div class="clear" style="border-bottom:#847542 dashed 1px"></div>
+        </div>    
+        <!--**********************一级回复板块结束********************-->
+		</volist>
+
+            <div class="clear"></div>     
+        </div>
+   
+	</section>
+	
+
+</section>
+
+</body>
+</html>
+

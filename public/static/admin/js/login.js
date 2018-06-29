@@ -29,12 +29,28 @@ $().ready(function(e) {
 		}
 		$.post(controller+'/checklogin',data,function(msg){
 			if(msg=='-1'){
-				alert('验证码错误');
-				return false;
+				layer.msg('验证码错误', {
+				  icon: 2,
+				  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+				}, function(){
+				  return false;
+				});    
+				
 			}else if(msg=='0'){
-				alert('用户名或密码错误！');
+				layer.msg('用户名或密码错误！', {
+				  icon: 2,
+				  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+				}, function(){
+				  return false;
+				}); 
 			}else if(msg.length=='1'){
-				location.href=module+'/admin/home';	
+				layer.msg('登录成功', {
+				  icon: 1,
+				  time: 1000 
+				}, function(){
+				  location.href=module+'/admin/home';
+				}); 				
+					
 			}
 			
 		});
