@@ -20,7 +20,7 @@
                 <div class="yuan" style=" background-image:url({$vo['head']});"></div><!--头像-->
                 <div class="hname">{$vo['name']}</div>                
                 <div class="rtime">{$vo['date']}</div>
-                <a class="hf">回复</a><a id="{$vo['id']}">删除</a>
+                <a class="hf">回复</a><a data-id="{$vo['id']}">删除</a>
             </div>
             <div class="res">{$vo['text']}</div><!--一级回复内容-->
             
@@ -41,10 +41,10 @@
                 <!--*****************二级回复板块*****************-->
                 <div class="reply">
                     <div class="boss2" >
-                        <div class="yuan" style=" background-image:url({$vo['head']});"></div><!--头像-->
+                        <div class="yuan" style=" background-image:url({$va['head']});"></div><!--头像-->
                         <div class="hname">{$va['name']}</div>                
                         <div class="rtime">{$va['date']}</div>
-                        <a id="{$va['id']}">删除</a>
+                        <a data-id="{$va['id']}">删除</a>
                         <div class="clear"></div>
                     </div>
                     <div class="res2">{$va['text']}</div>

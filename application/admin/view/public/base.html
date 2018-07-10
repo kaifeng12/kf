@@ -16,11 +16,11 @@
     <ul class="layui-nav layui-layout-right">
       <li class="layui-nav-item">
         <a href="javascript:;">
-          <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-          贤心
+          <img src="{:session('user.head')}" class="layui-nav-img">
+          {:session('user.net_name')}
         </a>
         <dl class="layui-nav-child">
-          <dd><a href="{:url('admin/pwd_change')}">修改密码</a></dd>
+          <dd><a href="javascript:void(0)" class="cpwd">修改密码</a></dd>
         </dl>
       </li>
       <li class="layui-nav-item"><a href="{:url('admin/logout')}">退出</a></li>
@@ -59,8 +59,9 @@
 <script src="__STATIC__/plugs/layui/layui.all.js"></script>
 <script src="__STATIC__/admin/js/admin.js"></script>
 <script type="text/javascript">
-    var controller="{:url('@'.request()->module().'/'.request()->controller().'','','')}";
-    var module = "{:url('@'.request()->module().'','','')}";
+    var controller="{:url('@'.request()->module().'/'.request()->controller().'','','',true)}";
+    var module = "{:url('@'.request()->module().'','','',true)}";
+    var uid={:session('user.id')}
 </script>
 {block name="script"}{/block}
 </body>

@@ -8,25 +8,37 @@ use think\App;
 class Admin extends BaseAdmin
 {
     
-    public function home(){             
+    /**
+     * 首页
+     * @return mixed|string
+     */
+    public function home(){    
         return $this->fetch('');
     }
     
-    public function top(){
-        checksess();     //验证session
-        $this->display();
+    /**
+     * 修改用户信息
+     * @return mixed|string|void
+     */
+    public function change_pwd(){
+        if(!$this->request->isPost()){
+            $user=Db::name('user')->where('id',$this->request->param('id'))->find();
+            return $this->fetch('',['user'=>$user]); 
+        }
+        $post=$this->request->post();
+        if(Db::name('user')->update(['id'=>$post['uid'],'net_name'=>$post['name'],'pwd'=>md5($post['pwd'])])){
+            session('user',null);
+            return $this->success('修改成功','login/index','',1);
+        }
+        
     }
     
-    public function left(){
-        checksess();     //验证session
-        $this->display();
-    }
-    
-
-    
+    /**
+     * 退出系统
+     */
     public function logout(){
-        session('id',null);
-        $this->success('退出成功','login/index');
+        session('user',null);
+        $this->success('退出成功','login/index','',1);
     }
     
 

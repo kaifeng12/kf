@@ -40,7 +40,7 @@ class Log extends BaseIndex
                 $login=1;
             }          
             
-            if(!$log=Db::name('log')->where(['is_deleted'=>1,'id'=>$id])->find()){
+            if(!$log=Db::name('log')->where(['is_deleted'=>0,'id'=>$id])->find()){
                 echo '你访问的地址不存在';
                 exit;
             }

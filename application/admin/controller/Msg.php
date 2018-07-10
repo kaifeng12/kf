@@ -17,25 +17,19 @@ class Msg extends BaseAdmin {
     public function reply(){
         $data=$this->request->param();
         $data['date']= time();
-        $data['uid']= session('id');halt($data);
-        $msg= D('msg');
-        $msg->create();
-        if($msg->add()){
-            $this->right();
+        $data['uid']= session('id');
+        $data['qid']=10;
+        if(Db::name('msg')->insert($data)){
+            $this->success('回复成功','index','',1);
         }else{
-            echo '回复失败';
-            sleep(2);
-            $this->right();
+            $this->error('回复失败','index','',2);
         }
-
     }
     
     
     public function delete(){
-        checksess();     //验证session    
-        if(session('id')!=='1') exit;
-        $id=$_POST['m_id'];
-        if(D('msg')->where('m_id='.$id)->save(array('m_isdelete'=>'1'))){
+        $id=$this->request->param('id');
+        if(Db::name('msg')->where('id',$id)->update(['is_deleted'=>1])){
             echo 1;
         }else{
             echo 0;

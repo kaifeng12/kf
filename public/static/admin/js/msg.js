@@ -19,18 +19,19 @@ $(function() {
 	});
 	
 	$('a:contains(删除)').bind('click',function(){
-		if(window.confirm('确定删除？')){
-			$.post(controller+'/delete',{m_id:this.id},function(msg){
+		var self=$(this);
+		var mid=self.data('id');
+
+		$.msg.confirm('确定要删除？',function(){
+			$.post(controller+'/delete',{id:mid},function(msg){
 				if(msg=='1'){
-					
-					window.location.reload();
+					$.msg.success('删除成功',1,function(){
+						self.parent().parent().remove();
+					})	
 				}else{
-					alert('删除失败');
-					window.location.reload();	
+					$.msg.error('删除失败',2);
 				}
 			});
-				
-		}else return false;
-		
+		})
 	});
 });
