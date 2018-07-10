@@ -8,8 +8,6 @@ use think\captcha\Captcha;
 class Login extends Controller
 {
     public function index(){
-        Db::name('visit')->where('node','showphoto')->update(['module'=>'index','node'=>'photo/showphoto','status'=>200]);exit;
-        
         if(session('user')){
             $this->redirect('admin/home');
         }
@@ -47,10 +45,9 @@ class Login extends Controller
         }
         $ip=$this->request->ip();
         $status=model('visit')->ip_filter($ip);
-        if($status==404) echo 0;exit;
+        if($status==404) return 0;
         if($user=model('user')->checklogin($param['name'],$param['pwd'])){
             //验证成功，密码正确
-            $data=['username'=>$param['name'],'pwd'=>$param['pwd'],'date'=>time(),'ip'=>$ip,'ip_adr'=>$ipinfo['adr'],'isp'=>$ipinfo['isp']];
             echo 1;
         }else{
             echo 0;

@@ -10,6 +10,12 @@ class BaseAdmin extends Controller {
     
     public function initialize()
     {   
+        $ip=$this->request->ip();
+        $status=model('visit')->ip_filter($ip);
+        if($status==404){
+            echo "<b style='font-size:50px'>404</b>";
+            exit;
+        }
         $this->checksess();
     }
 

@@ -43,7 +43,7 @@ $().ready(function(e) {
 				}, function(){
 				  return false;
 				}); 
-			}else if(msg.length=='1'){
+			}else if(msg=='1'){
 				layer.msg('登录成功', {
 				  icon: 1,
 				  time: 1000 
