@@ -13,7 +13,7 @@ class Admin extends BaseAdmin
      * @return mixed|string
      */
     public function home(){    
-        return $this->fetch('');
+        return $this->redirect('visit/index');
     }
     
     /**
