@@ -7,6 +7,25 @@ use think\Db;
 class Visit extends Model
 {
     
+    protected $type=[
+        'date' => 'timestamp'
+    ];
+    
+    public function visitList($limit,$page,$filter){
+        $total=ceil($this->count()-1);
+        $field='v.id,v.ip,adr,isp,forbidden,module,node,status,date,time';
+        $data=$this->where('v.id','<>','1')->alias('v')->join('ip_info p','v.ip=p.ip')->field($field)->order('v.id asc')->limit($limit*($page-1),$limit)->select()->toArray();
+        return [
+            'code'=>0,
+            'msg'=>'',
+            'count'=>$total,
+            'data'=>$data
+        ];
+    }
+    
+    
+    
+    
     /**
      * ip过滤
      * @param string $ip

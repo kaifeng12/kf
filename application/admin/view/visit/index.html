@@ -14,17 +14,14 @@ form {margin-top: 20px;}
 	        <input name="ip" value="" placeholder="请输入ip" class="layui-input">
 	    </div>
 	</div>
+
 	<div class="layui-form-item layui-inline">
 	    <label class="layui-form-label">所属国家</label>
 	    <div class="layui-input-inline">
 	        <select class="layui-select" name="country">
 	            <option value="">所有国家</option>
 	            {foreach ['国内','国外'] as $k=>$v}
-	            <!--{if $k.'' eq $Think.get.country}-->
-	            <option selected value="0">{$v}</option>
-	            <!--{else}-->
-	            <option value="1">{$v}</option>
-	            <!--{/if}-->
+	            <option value="{$k}">{$v}</option>
 	            {/foreach}
 	        </select>
 	    </div>
@@ -47,17 +44,13 @@ form {margin-top: 20px;}
 	        <select class="layui-select" name="forbidden">
 	            <option value="">所有类型</option>
 	            {foreach ['屏蔽','正常'] as $k=>$v}
-	            <!--{if $k.'' eq $Think.get.forbidden}-->
-	            <option selected value="1">{$v}</option>
-	            <!--{else}-->
-	            <option value="0">{$v}</option>
-	            <!--{/if}-->
+	            <option value="{$k}}">{$v}</option>
 	            {/foreach}
 	        </select>
 	    </div>
 	</div>
     <div class="layui-form-item layui-inline">
-        <button class="layui-btn layui-btn-primary"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        <button class="layui-btn layui-btn-primary" lay-submit lay-filter="formDemo"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
 
 </form>
@@ -74,7 +67,7 @@ layui.use('table', function(){
   var table = layui.table
   ,form = layui.form;
   
-  table.render({
+  var tableIns=table.render({
     elem: '#test'
     ,url:'{:url("table")}'
     ,cellMinWidth: 80
@@ -95,17 +88,36 @@ layui.use('table', function(){
     ,page: true
   });
   
-  //监听锁定操作
-  form.on('checkbox(forbidden)', function(obj){
-  	/*var checkStatus = table.checkStatus('test');
-  	console.log(checkStatus.data)*/ //获取选中行的数据
-  	
-    $.get("{:url('forbidden')}",{id:this.value,forbidden:obj.elem.checked},function (res) {
-    	console.log(res);
-    	layer.tips(this.value + '' + this.name + '：'+ obj.elem.checked, obj.othis);
-    });
-    
-  });
+	//监听锁定操作
+	form.on('checkbox(forbidden)', function(obj){
+		/*var checkStatus = table.checkStatus('test');
+		console.log(checkStatus.data)*/ //获取选中行的数据
+		var self=this;
+		$.get("{:url('forbidden')}",{id:this.value,forbidden:obj.elem.checked},function (res) {
+			var msg=obj.elem.checked?'已屏蔽':'已解除屏蔽';
+			layer.tips('此ip'+msg, obj.othis);
+			tableIns.reload();
+		});
+	});
+
+	form.on('submit(formDemo)', function(data){
+		var ajaxData=JSON.stringify(data.field);
+	    //layer.msg(JSON.stringify(data.field));
+	    //return false;
+	});
+
+	/*$('.layui-btn').on('click',function(){
+		var data={
+			'ip' : $('input[name="ip"]').val(),
+			'country' : $('input[name="country"]').val(),
+			'adr' : $('input[name="adr"]').val(),
+			'node' : $('input[name="node"]').val(),
+			'forbidden' : $('input[name="forbidden"]').val(),
+		}
+		console.log(data)
+	});*/
+
 });
+
 </script>
 {/block}
