@@ -19,7 +19,8 @@ class Visit extends BaseAdmin {
     public function table(){
         $limit=$this->request->param('limit',10);
         $page=$this->request->param('page',1);
-        $visit=model('visit')->visitList($limit,$page,[]);
+        $filter=$this->request->param('filter',[]);
+        $visit=model('visit')->visitList($limit,$page,$filter);
         echo json_encode($visit);
     }
     

@@ -13,7 +13,7 @@ class BaseAdmin extends Controller {
         $ip=$this->request->ip();
         $status=model('visit')->ip_filter($ip);
         if($status==404){
-            echo "<b style='font-size:50px'>404</b>";
+            echo "<b style='font-size:50px'>forbidden</b>";
             exit;
         }
         $this->checksess();

@@ -11,16 +11,16 @@ form {margin-top: 20px;}
 	<div class="layui-form-item layui-inline">
 	    <label class="layui-form-label">ip地址</label>
 	    <div class="layui-input-inline">
-	        <input name="ip" value="" placeholder="请输入ip" class="layui-input">
+	        <input name="v.ip" value="" placeholder="请输入ip" class="layui-input">
 	    </div>
 	</div>
 
 	<div class="layui-form-item layui-inline">
 	    <label class="layui-form-label">所属国家</label>
 	    <div class="layui-input-inline">
-	        <select class="layui-select" name="country">
+	        <select class="layui-select" name="is_china">
 	            <option value="">所有国家</option>
-	            {foreach ['国内','国外'] as $k=>$v}
+	            {foreach ['国外','国内'] as $k=>$v}
 	            <option value="{$k}">{$v}</option>
 	            {/foreach}
 	        </select>
@@ -43,18 +43,24 @@ form {margin-top: 20px;}
 	    <div class="layui-input-inline">
 	        <select class="layui-select" name="forbidden">
 	            <option value="">所有类型</option>
-	            {foreach ['屏蔽','正常'] as $k=>$v}
+	            {foreach ['正常','屏蔽'] as $k=>$v}
 	            <option value="{$k}}">{$v}</option>
 	            {/foreach}
 	        </select>
 	    </div>
 	</div>
+    <div class="layui-inline layui-form-item">
+      <label class="layui-form-label">时间范围</label>
+      <div class="layui-input-inline">
+        <input class="layui-input" id="timerand" name="timerand" placeholder=" - " type="text">
+      </div>
+    </div>	
     <div class="layui-form-item layui-inline">
-        <button class="layui-btn layui-btn-primary" lay-submit lay-filter="formDemo"><i class="layui-icon">&#xe615;</i> 搜 索</button>
+        <button class="layui-btn layui-btn-primary" data-type='active' lay-submit lay-filter="formDemo"><i class="layui-icon">&#xe615;</i> 搜 索</button>
     </div>
 
 </form>
-<table id="test" class="layui-hide"></table>
+<table id="table" class="layui-hide"></table>
 <script type="text/html" id="checkboxTpl">
   <input type="checkbox" name="lock" value="{{d.id}}" title="屏蔽" lay-filter="forbidden" {{ d.forbidden == 1 ? 'checked' : '' }}>
 </script>
@@ -65,10 +71,11 @@ form {margin-top: 20px;}
 <script>
 layui.use('table', function(){
   var table = layui.table
-  ,form = layui.form;
+  ,form = layui.form
+  ,laydate=layui.laydate;
   
   var tableIns=table.render({
-    elem: '#test'
+    elem: '#table'
     ,url:'{:url("table")}'
     ,cellMinWidth: 80
     ,cols: [[
@@ -101,11 +108,26 @@ layui.use('table', function(){
 	});
 
 	form.on('submit(formDemo)', function(data){
-		var ajaxData=JSON.stringify(data.field);
-	    //layer.msg(JSON.stringify(data.field));
-	    //return false;
+
+	
+			
+				table.reload('table',{
+					page: {
+						curr: 1//重载后从第一页开始
+					},
+					where: {
+						filter:	data.field
+					}
+				});
 	});
 
+	  //日期时间范围
+	  laydate.render({
+	    elem: '#timerand'
+	    ,type: 'datetime'
+	    ,range: '~'
+	    ,format:'yyyy-MM-dd HH:mm:ss'
+	  });
 	/*$('.layui-btn').on('click',function(){
 		var data={
 			'ip' : $('input[name="ip"]').val(),

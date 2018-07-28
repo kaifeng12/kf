@@ -12,9 +12,27 @@ class Visit extends Model
     ];
     
     public function visitList($limit,$page,$filter){
-        $total=ceil($this->count()-1);
         $field='v.id,v.ip,adr,isp,forbidden,module,node,status,date,time';
-        $data=$this->where('v.id','<>','1')->alias('v')->join('ip_info p','v.ip=p.ip')->field($field)->order('v.id asc')->limit($limit*($page-1),$limit)->select()->toArray();
+        $db=$this->where('v.id','<>','1')->alias('v')->join('ip_info p','v.ip=p.ip')->field($field);
+        //搜索筛选
+        foreach (['v.ip','is_china','adr','node','forbidden','timerand'] as $k=>$f){
+            if(isset($filter[$f]) && $filter[$f]!=''){
+                if($k==1 || $k==4){
+                    $db->where($f,$filter[$f]);
+                }elseif ($k==5){
+                    $date=explode('~',$filter[$f]);
+                    $db->whereBetween('date',strtotime($date[0]).','.strtotime($date[1]));
+                }elseif($k==3 && $filter[$f]=='admin') {
+                    $db->whereLike('module',"%{$filter[$f]}%");
+                }else{
+                    $db->whereLike($f,"%{$filter[$f]}%");
+                }
+                
+            }
+        }
+        $todb=clone $db; 
+        $total=$todb->count();
+        $data=$db->order('v.id asc')->limit($limit*($page-1),$limit)->select()->toArray();
         return [
             'code'=>0,
             'msg'=>'',
@@ -60,11 +78,13 @@ class Visit extends Model
             return false;
         }
         $forbidden=$info['country_id']=='CN'?0:1;
+        $is_china=$forbidden ? 0 : 1;
         Db::name('ip_info')->insert([
            'ip'=>$ip,
             'adr'=>"{$info['country']}-{$info['region']}-{$info['city']}",
             'isp'=>$info['isp'],
             'forbidden'=>$forbidden,
+            'is_china'=>$is_china
         ]);
         if(!$forbidden){
             $this->record($ip,$nodearr[0],$action);
