@@ -15,7 +15,6 @@ class Photo extends BaseAdmin{
     
     //相册创建
     public function create(){
-        checksess(); // 验证session
         $pho= new \Model\PhotoModel();
 
         if($photo=$pho->upload('g_cover',0)){
