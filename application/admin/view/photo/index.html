@@ -1,0 +1,54 @@
+{extend name="admin@public/base"}
+
+{block name="css"}
+<link rel="stylesheet" href="__STATIC__/admin/css/photo.css" media="all" />
+{/block}
+{block name="content"} 
+<div class='photo'>
+<form action="{:url('groupDelete')}" method="post">
+    {foreach $group as $vo}
+    <div class="pgroup" id="{$vo['id']}">
+        <a href="{:url('showPhoto','id='.$vo['id'])}">
+        <img src="{$vo['cover']}" width="100" height="100" >
+        </a>
+        <div style="text-align:center;cursor:pointer;">
+            <a href="{:url('showPhoto','id='.$vo['id'])}">{$vo['name']}</a>
+        </div>
+        <input type="checkbox" value="{$vo['id']}" name="id[]">
+    </div>
+    {/foreach}
+
+    <div class="clear"></div>
+    <input type="submit" value="删除" onClick="return window.confirm('确定删除？')" >
+    </form>
+</div>
+    
+<div class="edit">
+        <span class="button">
+            新建相册
+        </span>
+        <span class="button dropdown">删除相册</span> 
+</div>
+<div class="newpho" style="display:none">
+    <form action="{:url('create')}" method="post" enctype="multipart/form-data">
+        相册名称：<input type="text" name="name">
+        <input type="file" name="cover">
+        <input type="submit" value="创建">
+    </form>
+</div>
+{/block}
+
+{block name="script"}
+<script>
+    $(function(e) {
+        $('.button:eq(0)').bind('click',function(){
+            $('.newpho').toggle();
+        });
+        
+        $('.button:eq(1)').bind('click',function(){
+            $('.photo input').toggle();
+        });
+    });
+</script>
+{/block}
+

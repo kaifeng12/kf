@@ -1,24 +1,16 @@
 <?php
-namespace Admin\Controller;
+namespace app\admin\controller;
 
-use Think\Controller;
+use controller\BaseAdmin;
+use think\Db;
+use think\App;
 
-class PhotoController extends Controller{
-
-    // 定义空操作
-    public function _empty(){
-        echo '您访问的地址不存在';
-    }
-    
+class Photo extends BaseAdmin{
     
     //相册显示
-    public function right(){
-        checksess(); // 验证session
-        $group=D('img_group')->where('g_isdelete=0')->select();
-        
-        $this->assign('group',$group);
-        $this->display();
-       
+    public function index(){
+        $group=Db::name('img_group')->where('is_deleted',0)->select();
+        return $this->fetch('',['group'=>$group]);
     }
     
     //相册创建

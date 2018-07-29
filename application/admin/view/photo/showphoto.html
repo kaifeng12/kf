@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+	<meta charset="utf-8">
+	<title>右边</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="robots" content="" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+<link rel="stylesheet" href="__PUBLIC__/Admin/css/photo.css" media="all" />
+    <script src="__PUBLIC__/jquery/jquery.js"></script>
+    <script>
+	var controller='__CONTROLLER__/';
+    var module='__MODULE__/';
+	var json={$ph};
+	var group={$g_id};
+    </script>
+    <script src="__PUBLIC__/Admin/js/photo.js"></script>
+
+
+</head>
+
+<body>
+
+
+<div class='photo'>
+	<div class="bigimg" >
+    	<img src="#" id="im">
+    </div>
+    <div class="thumbs" name='1'>
+    	<img src="__PUBLIC__/Admin/images/prev.jpg" style="float:left;" >
+    	<div class="thumb"></div>
+        <div class="thumb"></div>
+        <div class="thumb"></div>
+        <div class="thumb"></div>
+		<div class="thumb"></div>
+        <img src="__PUBLIC__/Admin/images/next.jpg" style="float:right;" >
+    </div> 
+	<div class="delete" style="display:none">
+    	<form action="__CONTROLLER__/delete" method="post">
+        	<input type="checkbox" value="1" name="p_id[]">
+            <input type="checkbox" value="1" name="p_id[]">
+            <input type="checkbox" value="1" name="p_id[]">
+            <input type="checkbox" value="1" name="p_id[]">
+            <input type="checkbox" value="1" name="p_id[]">
+        	<input type="submit" value="删除" id="sub" onClick="return confirm('确定要删除')">
+        </form>
+    </div>
+
+    <div class="clear"></div>
+</div>
+    
+<div class="edit">
+		<span class="button">
+			添加图片
+		</span>
+        <span class="button dropdown">删除图片</span> 
+</div>
+
+	<div class="box" >
+        <form method="post" enctype="multipart/form-data" action="__CONTROLLER__/upload">
+        	<input type="file" name="p_img">
+            <input type="hidden" name="g_id" value="{$g_id}">
+            <input type="submit" value="上传">
+        </form>
+    </div>
+   
+
+
+</body>
+</html>
+
