@@ -77,7 +77,7 @@ class Visit extends Model
             $this->where('id',1)->update(['status',501]);
             return false;
         }
-        $forbidden=$info['country_id']=='CN'?0:1;
+        $forbidden=($info['country_id']=='CN' || $info['country']=='中国')?0:1;
         $is_china=$forbidden ? 0 : 1;
         Db::name('ip_info')->insert([
            'ip'=>$ip,

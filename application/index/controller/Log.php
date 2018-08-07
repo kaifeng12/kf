@@ -26,9 +26,6 @@ class Log extends BaseIndex
     //阅读文章显示
     public function read(){
         $id=$this->request->param('id');
-        session('qname','开疯');
-        session('qhead','http://q.qlogo.cn/qqapp/101450092/1E1F6812DAD457AD953AFB993C1B84AB/100');
-        session('openid','1E1F6812DAD457AD953AFB993C1B84AB');
         if($id){
             //判断是否登录
             $login=0;
