@@ -2,27 +2,35 @@
 
 {block name="css"}
 <link rel="stylesheet" href="__STATIC__/admin/css/photo.css" media="all" />
+<style type="text/css">
+.pointer{cursor: pointer;}
+.none{display: none;}
+.layui-input{height: 25px;}
+.edit_cover{position: absolute;top:0;right:0;display: none;}
+</style>
 {/block}
 {block name="content"} 
 <div class='photo'>
 <form action="{:url('groupDelete')}" method="post">
     {foreach $group as $vo}
     <div class="pgroup" id="{$vo['id']}">
-        <a href="{:url('showPhoto','id='.$vo['id'])}">
-        <img src="{$vo['cover']}" width="100" height="100" >
+        <div class="layui-btn layui-btn-primary layui-btn-sm edit_cover" id="edit_cover" lay-data="{data:{type:'cover',gid:{$vo.id}}}"><i class="layui-icon"></i></div>
+        <a href="{:url('showphoto','id='.$vo['id'])}" >
+        <img src="{$vo['cover']}" id='cover_{$vo.id}' width="98" height="98" >
         </a>
-        <div style="text-align:center;cursor:pointer;">
-            <a href="{:url('showPhoto','id='.$vo['id'])}">{$vo['name']}</a>
+        <div style="text-align:center;" class="pointer">
+            <!-- <a href="{:url('showPhoto','id='.$vo['id'])}">{$vo['name']}</a> -->
+            <input name="name" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input name" type="text">
         </div>
-        <input type="checkbox" value="{$vo['id']}" name="id[]">
+        <input type="checkbox" value="{$vo['id']}" name="id[]" class='pointer none'>
     </div>
     {/foreach}
 
     <div class="clear"></div>
-    <input type="submit" value="删除" onClick="return window.confirm('确定删除？')" >
-    </form>
+    <input type="submit" value="删除" onClick="return window.confirm('确定删除？')" class="layui-btn none" >
+</form>
 </div>
-    
+  
 <div class="edit">
         <span class="button">
             新建相册
@@ -41,13 +49,71 @@
 {block name="script"}
 <script>
     $(function(e) {
+        //新建
         $('.button:eq(0)').bind('click',function(){
             $('.newpho').toggle();
         });
         
+        //删除
         $('.button:eq(1)').bind('click',function(){
-            $('.photo input').toggle();
+            $('.none').toggle();
         });
+
+        //显示编辑
+        $(".pgroup").mouseover(function (){  
+            $(".edit_cover").show();  
+        }).mouseout(function (){  
+            $(".edit_cover").hide();  
+        });
+
+        //跳转相册
+        $('.showphoto').on('click',function(){
+            var id=$(this).data('id');
+            alert('id'+id);
+            //window.location.href="{:url('showphoto','id=')}";
+        })        
+
+        //编辑相册名
+        $('.name').on('blur',function(){
+            var val=this.value;
+            $.post("{:url('checkMember')}", {phone: phone, brand_id: brand_id, id: id}, function (ret) {
+                $.msg.close(index);
+                if (ret.code === 1) {
+                    if (ret.data.is_member == 0) {
+
+                    } else {
+
+                    }
+                } else {
+                    $.msg.error(ret.msg, 3, function () {
+
+                    });
+                }
+            });
+        })
+
+        //上传封面
+        var upload = layui.upload;
+          //执行实例
+        var uploadInst = upload.render({
+            elem: '#edit_cover' //绑定元素
+            ,url: '{:url('edit')}' //上传接口
+            ,field:'cover'
+            ,done: function(res){
+                //上传完毕回调
+                if (res.code === 1) {
+                    $('#cover_'+res.data.gid).attr('src',res.data.path);
+                } else {
+                    $.msg.error(res.msg, 2);
+                }
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+
+
+
     });
 </script>
 {/block}

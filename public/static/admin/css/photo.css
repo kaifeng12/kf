@@ -1,6 +1,6 @@
 body,html,div,span,img,form,input{ padding:0px; margin:0px}
 
-.button, button {
+.button {
 	border: 1px solid #323537;
 	padding: 10px 15px;
 	color: #fff;
@@ -36,12 +36,11 @@ a:link, a:active, a:visited {
 /***相册***/
 .box{ width:23%; background-color:#EFEFEF; margin:30px auto;}
 .photo{ width:630px; margin: 20px auto; text-align:center}
-.pgroup{ width:100px; height:130px; float:left;margin-left:45px;padding-bottom:20px}
+.pgroup{ width:100px; height:130px; float:left;margin-left:45px;padding-bottom:20px;position: relative;}
 .pgroup img{border:1px #CCCCCC solid;}
 .pgroup img:hover{ cursor:pointer; border:#390 solid 3px}
 .pgroup a{ color:#633}
 .newpho{ width:19%; border:#D0D0D0 solid 1px; margin:40px auto}
-.photo input{ display:none}
 
 
 /*相册内部*/

@@ -3,6 +3,7 @@ namespace app\common\model;
 use think\Model;
 use think\Request;
 use think\Db;
+use think\image;
 
 class Photo extends Model
 {
