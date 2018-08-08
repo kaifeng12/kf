@@ -20,7 +20,7 @@
         </a>
         <div style="text-align:center;" class="pointer">
             <!-- <a href="{:url('showPhoto','id='.$vo['id'])}">{$vo['name']}</a> -->
-            <input name="name" lay-verify="title" autocomplete="off" placeholder="请输入标题" class="layui-input name" type="text">
+            <input name="name" lay-verify="title" data-id="{$vo.id}" autocomplete="off" placeholder="请输入标题" class="layui-input name" type="text" data-old="{$vo.name}" value="{$vo.name}">
         </div>
         <input type="checkbox" value="{$vo['id']}" name="id[]" class='pointer none'>
     </div>
@@ -75,18 +75,15 @@
 
         //编辑相册名
         $('.name').on('blur',function(){
-            var val=this.value;
-            $.post("{:url('checkMember')}", {phone: phone, brand_id: brand_id, id: id}, function (ret) {
-                $.msg.close(index);
+            var id=$(this).data('id');
+            var self=this;
+            $.post("{:url('edit')}", {type: 'name', title: this.value, gid: id}, function (ret) {
                 if (ret.code === 1) {
-                    if (ret.data.is_member == 0) {
 
-                    } else {
-
-                    }
                 } else {
-                    $.msg.error(ret.msg, 3, function () {
-
+                    $.msg.error(ret.msg, 2, function () {
+                        var old=$(self).data('old');
+                        $(self).val(old);
                     });
                 }
             });
@@ -109,6 +106,7 @@
             }
             ,error: function(){
                 //请求异常回调
+                $.msg.error('服务异常', 2);
             }
         });
 

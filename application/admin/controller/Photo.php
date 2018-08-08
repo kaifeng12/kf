@@ -122,13 +122,23 @@ class Photo extends BaseAdmin{
         $type=$this->request->post('type','');
         $gid=$this->request->post('gid','');
         if(empty($type) || empty($gid)) $this->error('参数错误');
-        $file=$this->request->file('cover');
-        $info=$file->getInfo();
-        $extension=strrchr($info['name'], '.');
-        $thumb=Image::open($file);
-        $thumbSaveName='static/uploads/photo/cover_'.md5(time()).$extension;
-        $thumb->thumb(100, 100)->save($thumbSaveName);
-        Db::name('img_group')->where('id',$gid)->update(['cover'=>'/'.$thumbSaveName]);
-        $this->success('编辑成功','',['gid'=>$gid,'path'=>'/'.$thumbSaveName]);
+        if($type=='cover'){
+            $file=$this->request->file('cover');
+            $info=$file->getInfo();
+            $extension=strrchr($info['name'], '.');
+            $thumb=Image::open($file);
+            $thumbSaveName='static/uploads/photo/cover_'.md5(time()).$extension;
+            $thumb->thumb(100, 100)->save($thumbSaveName);
+            Db::name('img_group')->where('id',$gid)->update(['cover'=>'/'.$thumbSaveName]);
+            $this->success('编辑成功','',['gid'=>$gid,'path'=>'/'.$thumbSaveName]);
+        }elseif ($type=='name'){
+            $title=$this->request->post('title');
+            empty($title) && $this->error('不能为空');
+            if(Db::name('img_group')->where('id',$gid)->update(['name'=>$title])){
+                $this->success('');
+            }
+            $this->error('编辑失败');
+        }
+
     }
 }
