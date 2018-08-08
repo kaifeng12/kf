@@ -3,6 +3,7 @@
 /vendor
 *.log
 thinkphp
+runtime
 .env
 *.settings
 *.project
