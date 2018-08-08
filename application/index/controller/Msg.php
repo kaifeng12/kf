@@ -37,32 +37,31 @@ class Msg extends BaseIndex
     
     
     public function callback(){
-        $state=isset($_GET['state'])?$_GET['state']:'';
-        
+        $state=$this->request->get('state','');
+        $code=$this->request->get('code','');
         //查找$state是否含有12，并删除前两个字符，剩下的为文章id
         $str=strstr($state, '12');//得到字符串中‘12’后面的字符（包括12）
    
-        if(isset($_GET['code']) && $str){
+        if($state && $str && $code){
             $l_id=str_replace('12', '', $str);//去除‘12’
             
-            $qq=new \Model\QqModel();
-            if($user=$qq->callback($_GET['code'])){
+            if($user=model('qq')->callback($code)){
                 
                 session('qname',$user['name']);
                 session('qhead',$user['head']);
                 session('openid',$user['openid']);
                 
                 if($l_id=='00'){
-                    echo "<script>window.location='http://www.likaifeng.xyz/Home/Msg/msg'</script>";
+                    $this->redirect('msg');
                 }else{
-                    echo "<script>window.location='http://www.likaifeng.xyz/Home/Log/read/id/{$l_id}#cmt'</script>";
+                    echo "<script>window.location='http://www.likaifeng.xyz/index/Log/read/id/{$l_id}#cmt'</script>";
                 }
             }else{
-                dump('登录失败');
+                echo '登录失败';
                 exit;
             }
             /*
-            $url="https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=101450092&client_secret=df8d25dfe66beebd1f78e8367c0deda2&code={$_GET['code']}&redirect_uri=http://www.likaifeng.xyz/Home/Msg/callback";
+            $url="https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=101450092&client_secret=df8d25dfe66beebd1f78e8367c0deda2&code={$_GET['code']}&redirect_uri=http://www.likaifeng.xyz/index/Msg/callback.html";
             $Access_Token=file_get_contents($url);
             if($Access_Token){
                 $Openidurl="https://graph.qq.com/oauth2.0/me?{$Access_Token}";
@@ -76,6 +75,8 @@ class Msg extends BaseIndex
                 dump($QQUserInfo['nickname']);
                 */
             
+        }else{
+            $this->redirect('index/index');
         }
           
     }
@@ -84,7 +85,7 @@ class Msg extends BaseIndex
         session('qname',null);
         session('qhead',null);
         session('openid',null);
-        echo "<script>window.location='http://www.likaifeng.xyz/Home/Msg/msg'</script>";
+        echo "1";
     }
     
     /*

@@ -17,7 +17,7 @@ class Visit extends BaseAdmin {
      * ajax获取访问统计数据
      */
     public function table(){
-        $limit=$this->request->param('limit',10);
+        $limit=$this->request->param('limit',90);
         $page=$this->request->param('page',1);
         $filter=$this->request->param('filter',[]);
         $visit=model('visit')->visitList($limit,$page,$filter);
