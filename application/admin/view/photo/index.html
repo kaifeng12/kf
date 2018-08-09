@@ -7,6 +7,8 @@
 .none{display: none;}
 .layui-input{height: 25px;}
 .edit_cover{position: absolute;top:0;right:0;display: none;}
+.layui-upload-drag{width: 98px;padding: 0px;height: 78px;padding-top: 20px;}
+.layui-upload-drag .layui-icon{font-size: 22px;}
 </style>
 {/block}
 {block name="content"} 
@@ -15,12 +17,12 @@
     {foreach $group as $vo}
     <div class="pgroup" id="{$vo['id']}">
         <div class="layui-btn layui-btn-primary layui-btn-sm edit_cover" id="edit_cover" lay-data="{data:{type:'cover',gid:{$vo.id}}}"><i class="layui-icon"></i></div>
-        <a href="{:url('showphoto','id='.$vo['id'])}" >
+        <a href="{:url('showphoto','gid='.$vo['id'])}" >
         <img src="{$vo['cover']}" id='cover_{$vo.id}' width="98" height="98" >
         </a>
         <div style="text-align:center;" class="pointer">
             <!-- <a href="{:url('showPhoto','id='.$vo['id'])}">{$vo['name']}</a> -->
-            <input name="name" lay-verify="title" data-id="{$vo.id}" autocomplete="off" placeholder="请输入标题" class="layui-input name" type="text" data-old="{$vo.name}" value="{$vo.name}">
+            <input name="name" lay-verify="title" data-id="{$vo.id}" autocomplete="off" placeholder="请输入标题" class="layui-input name" type="text" data-old="{$vo.name}" value="{$vo.name}" style="text-align:center;">
         </div>
         <input type="checkbox" value="{$vo['id']}" name="id[]" class='pointer none'>
     </div>
@@ -61,28 +63,23 @@
 
         //显示编辑
         $(".pgroup").mouseover(function (){  
-            $(".edit_cover").show();  
+            $(this).find(".edit_cover").show();  
         }).mouseout(function (){  
-            $(".edit_cover").hide();  
-        });
+            $(this).find(".edit_cover").hide();  
+        }); 
 
-        //跳转相册
-        $('.showphoto').on('click',function(){
-            var id=$(this).data('id');
-            alert('id'+id);
-            //window.location.href="{:url('showphoto','id=')}";
-        })        
-
+        var layer=layui.layer;
         //编辑相册名
         $('.name').on('blur',function(){
             var id=$(this).data('id');
             var self=this;
+            var old=$(self).data('old');
+            if(this.value==old) return false;
             $.post("{:url('edit')}", {type: 'name', title: this.value, gid: id}, function (ret) {
                 if (ret.code === 1) {
-
+                    layer.tips('编辑成功', self);
                 } else {
                     $.msg.error(ret.msg, 2, function () {
-                        var old=$(self).data('old');
                         $(self).val(old);
                     });
                 }
@@ -109,7 +106,6 @@
                 $.msg.error('服务异常', 2);
             }
         });
-
 
 
     });

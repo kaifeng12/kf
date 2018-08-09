@@ -16,103 +16,78 @@ class Photo extends BaseAdmin{
     
     //相册创建
     public function create(){
-        $pho= new \Model\PhotoModel();
-
-        if($photo=$pho->upload('g_cover',0)){
-
-            $data['g_cover']=$photo['p_thumb'];
-            $data['g_name']=$_POST['g_name'];
-            if(D('img_group')->add($data)){
-                $this->success('上传成功');
-            }else{
-                $this->error($pho->err);
-            }
-        }else{
-            $this->error($pho->err);
-        } 
+        $file=$this->request->file('cover');
+        $title=$this->request->post('name','');
+        if(!$file || !$title) $this->error('参数错误');
+        $thumbSaveName=$this->saveCover('cover', 100, 100);
+        Db::name('img_group')->insert(['name'=>$title,'cover'=>'/'.$thumbSaveName]);
+        $this->redirect('index');
     }
     
     //相册删除操作
     public function groupDelete(){
-        checksess();
-		$g_id=isset($_POST['g_id']) ? $_POST['g_id'] : '';
-		
-		if($g_id){
-			$str=implode(',',$g_id);
-			$str='g_id in('.$str.')';
-			if(D('img_group')->where($str)->delete()){
-				$this->success('删除成功');
-			}else{
-				$this->error('删除失败');
-			}
-		}
+        $ids=$this->request->post('id');
+        if($ids){
+            foreach ($ids as $id){
+                Db::name('img_group')->where('id',$id)->update(['is_deleted'=>1]);
+            }
+        }
+        $this->redirect('index');
     }
     
     //图片显示
-    public function showPhoto(){
-        checksess();
-        $id=isset($_GET['id']) ? $_GET['id'] : '';
-        
-        $photo=D('photo')->where('g_id='.$id.' and p_isdelete=0')->limit(5)->select();
-        
-        $p= json_encode($photo);
-        if(!$photo) $p="[0]";
-        
-        $this->assign('ph',$p);
-        
-        $this->assign('g_id',$id);
-        $this->display();
+    public function showphoto(){
+        $gid=$this->request->param('gid','');
+        $page=$this->request->param('page',1,'trim,intval');
+        $map=['is_deleted'=>0,'gid'=>$gid];
+        $total=Db::name('photo')->where($map)->count();
+        $db=Db::name('photo')->where($map)->paginate(5,(integer)$total,['page'=>$page]);
+        $photo=$db->all();
+        $ph=json_encode($photo);
+        if(!$photo) $ph='[0]';
+        $data=['gid'=>$gid,'ph'=>$ph,'lastPage'=>$db->lastPage(),'currentPage'=>$db->currentPage()];
+        return $this->fetch('',$data);        
     }
     
     //获得指定数量的图片信息，ajax实现换一组图片的功能
     public function photolist(){
-        checksess();
-        $page=$_GET['page'];                                    //当前页码
-        $act=$_GET['act'];                                      //换组动作，下一组还是上一组
-        $group=$_GET['group'];                                  //图片所属相册id
-        $count=D('photo')->where('g_id='.$group.' and p_isdelete=0')->count();      //获得数据总数量
-        $pgc=ceil($count/5);                                    //获得总页数
-       
+        if(!$this->request->isAjax()) return '页面不存在';
+        $param=$this->request->param();
+        $page=$param['page'];                                    //当前页码
+        $act=$param['act'];                                      //换组动作，下一组还是上一组
+        $group=$param['gid'];                                  //图片所属相册id
+        $count=Db::name('photo')->where(['gid'=>$group,'is_deleted'=>0])->count();
         if($page=='1' && $act=='prev'){
             echo 0;
             exit;
         }
-        if($page==$pgc && $act=='next'){
+        $act=='prev' && $page--;
+        $act=='next' && $page++;
+        $db=Db::name('photo')->where(['gid'=>$group,'is_deleted'=>0])->paginate(5,(int)$count,['page'=>$page]);
+        if(!$lists=$db->all()){
             echo 0;
             exit;
         }
-        if($act=='prev'){
-            $page--;
-        }elseif ($act=='next'){
-            $page++;
-        }
-        $firstRow=5*($page-1);                                  //limit开始的数据
-        $lists=D('photo')->where('g_id='.$group.' and p_isdelete=0')->limit($firstRow,5)->select();
         $json= json_encode($lists);
         echo $json;
         
     }
     
     //图片上传操作
-    public function upload(){
-        checksess();
-        $pho=new \Model\PhotoModel();
-        if($pho->upload('p_img')){
-            $this->success('上传成功');
-        }else{
-            $this->error($pho->err);
-        }      
+    public function addphoto(){
+        $this->success('1');
     }
     
     //图片删除操作
     public function delete(){
-       
-        $str=implode(',',$_POST['p_id']);
-        $str='p_id in('.$str.')';
-        if(D('photo')->where($str)->save(array('p_isdelete'=>1))){
-            $this->success('删除成功');
-        }else $this->error('删除失败');
-
+        $ids=$this->request->param('id','');
+        $gid=$this->request->param('gid','');
+        if($ids && $gid){
+            foreach ($ids as $id){
+                Db::name('photo')->where('id',$id)->update(['is_deleted'=>1]);
+            }
+        }
+        $this->redirect('showphoto',['gid'=>$gid]);
     }
     
     /**
@@ -123,12 +98,7 @@ class Photo extends BaseAdmin{
         $gid=$this->request->post('gid','');
         if(empty($type) || empty($gid)) $this->error('参数错误');
         if($type=='cover'){
-            $file=$this->request->file('cover');
-            $info=$file->getInfo();
-            $extension=strrchr($info['name'], '.');
-            $thumb=Image::open($file);
-            $thumbSaveName='static/uploads/photo/cover_'.md5(time()).$extension;
-            $thumb->thumb(100, 100)->save($thumbSaveName);
+            $thumbSaveName=$this->saveCover('cover', 100, 100);
             Db::name('img_group')->where('id',$gid)->update(['cover'=>'/'.$thumbSaveName]);
             $this->success('编辑成功','',['gid'=>$gid,'path'=>'/'.$thumbSaveName]);
         }elseif ($type=='name'){
@@ -140,5 +110,18 @@ class Photo extends BaseAdmin{
             $this->error('编辑失败');
         }
 
+    }
+    
+    /**
+     * 保存上传的照片缩略图
+     */
+    private function saveCover($key,$width,$height){
+        $file=$this->request->file($key);
+        $info=$file->getInfo();
+        $extension=strrchr($info['name'], '.');//图片后缀
+        $thumb=Image::open($file);
+        $thumbSaveName='static/uploads/photo/cover_'.md5(time()).$extension;
+        $thumb->thumb($width, $height)->save($thumbSaveName);
+        return $thumbSaveName;
     }
 }

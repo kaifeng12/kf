@@ -55,6 +55,6 @@ a:link, a:active, a:visited {
 .thumbs img:hover{ opacity:1; cursor:pointer}
 .delete{ width:535px; height:50px;margin:0px auto;}
 .delete input{ margin:0px 47px }
-.delete input[type=submit]{ margin-left:250px}
+.delete input[type=submit]{ margin:0px}
 
 
