@@ -19,7 +19,7 @@ class Photo extends BaseAdmin{
         $file=$this->request->file('cover');
         $title=$this->request->post('name','');
         if(!$file || !$title) $this->error('参数错误');
-        $thumbSaveName=$this->saveCover('cover', 100, 100);
+        $thumbSaveName=$this->saveCover('cover','cover', 100, 100);
         Db::name('img_group')->insert(['name'=>$title,'cover'=>'/'.$thumbSaveName]);
         $this->redirect('index');
     }
@@ -75,7 +75,13 @@ class Photo extends BaseAdmin{
     
     //图片上传操作
     public function addphoto(){
-        $this->success('1');
+        $gid=$this->request->post('gid','');
+        $photo=$this->request->file('photo');
+        if(empty($gid) || !$photo) $this->error('参数错误');
+        $imageInfo=$this->saveCover('photo','photo', 100, 100);
+        if(!$imageInfo['image'] || !$imageInfo['thumb']) $this->error('上传失败');
+        Db::name('photo')->insert(['gid'=>$gid,'path'=>'/'.$imageInfo['image'],'thumb'=>'/'.$imageInfo['thumb']]);
+        $this->success('');
     }
     
     //图片删除操作
@@ -98,7 +104,7 @@ class Photo extends BaseAdmin{
         $gid=$this->request->post('gid','');
         if(empty($type) || empty($gid)) $this->error('参数错误');
         if($type=='cover'){
-            $thumbSaveName=$this->saveCover('cover', 100, 100);
+            $thumbSaveName=$this->saveCover('cover','cover', 100, 100);
             Db::name('img_group')->where('id',$gid)->update(['cover'=>'/'.$thumbSaveName]);
             $this->success('编辑成功','',['gid'=>$gid,'path'=>'/'.$thumbSaveName]);
         }elseif ($type=='name'){
@@ -113,15 +119,33 @@ class Photo extends BaseAdmin{
     }
     
     /**
-     * 保存上传的照片缩略图
+     * 保存上传的图片缩略图
+     * @param string $type 
+     * @param string $key
+     * @param float $width  缩略图宽
+     * @param float $height
+     * @return string|array
      */
-    private function saveCover($key,$width,$height){
+    private function saveCover($type,$key,$width,$height){
         $file=$this->request->file($key);
         $info=$file->getInfo();
         $extension=strrchr($info['name'], '.');//图片后缀
-        $thumb=Image::open($file);
-        $thumbSaveName='static/uploads/photo/cover_'.md5(time()).$extension;
-        $thumb->thumb($width, $height)->save($thumbSaveName);
-        return $thumbSaveName;
+        $image=Image::open($file);
+        $savePath='static/uploads/photo/';
+        if($type=='cover'){
+            $thumbSaveName=$savePath.'cover_'.md5(time()).$extension;
+            $image->thumb($width, $height)->save($thumbSaveName);
+            return $thumbSaveName;
+        }elseif ($type=='photo'){
+            $imageSaveName=$savePath.md5(microtime()).$extension;//多图上传可能再一秒内上传多张，应该用微妙时间戳
+            if ($image->width() > 600 || $image->height() > 300){
+                $image->thumb(600, 300)->save($imageSaveName);
+            }else {
+                $image->save($imageSaveName);
+            }
+            $thumbSaveName=$savePath.'thumb_'.md5(microtime()).$extension;
+            $image->thumb($width, $height)->save($thumbSaveName);
+            return ['image'=>$imageSaveName,'thumb'=>$thumbSaveName];
+        }
     }
 }

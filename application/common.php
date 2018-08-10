@@ -87,3 +87,8 @@ function changDate(&$arr,$key,$type=0){
     }
     //return $arr;
 }
+
+//获取系统配置
+function sys_config($name,$type){
+    return Db::name('config')->where(['name'=>$name,'type'=>$type])->value('value');
+}

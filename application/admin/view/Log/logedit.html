@@ -1,0 +1,79 @@
+{extend name="admin@public/base"}
+
+{block name="css"}
+<link rel="stylesheet" href="__STATIC__/admin/css/style.css" media="all" />
+{/block}
+{block name="content"} 
+<section class="content">
+    <section class="widget">
+        <header>
+            <span class="icon">&#128200;</span>
+            <hgroup>
+                <h2 style="padding-top:15px" >编辑文章</h2>
+            </hgroup>
+        </header>   
+        <div class="main">
+            <div class="msg">
+                <form action="__CONTROLLER__/logediting/id/{$logs['id']}" method="post" >
+                <font size="4">修改标题：</font><input type="text" value="{$logs['title']}" name="title" /><br />
+                
+                <font size="4">修改描述：</font><br /><br />
+                <textarea name="des">{$logs['des']}</textarea><br /><br />
+                <font size="4">修改类型：</font>
+                <select name="type">
+                    <option value="0" <if condition="$logs['type'] eq 0">selected</if> >生活日志</option>
+                    <option value="1" <if condition="$logs['type'] eq 1">selected</if>  >技术杂谈</option>
+                </select><br /><br />
+                <div class="cover">
+                    <font size="4">修改封面：</font>
+                    <input type="text" name="cover" />
+                    <div class="cimg">
+                    
+                    </div>
+                    <br /><br />
+                </div>
+                
+                <font size="4">是否修改发布时间：</font><input type="checkbox" name="istime" value="1" id="is" />
+                <br /><br /><br /><br /><br />
+            </div>
+            <div class="text">
+                <textarea name="content" >
+                {$logs['content']}
+                </textarea>
+            </div>
+            <button class="blue" onclick="return window.confirm('确定提交修改？')">提交修改</button>
+            </form>
+        </div>
+
+    </section>
+    
+
+</section>
+{/block}
+
+{block name="script"}
+<script src="__STATIC__/admin/ckeditor/ckeditor.js"></script>
+<script>
+var static='__STATIC__';
+window.onload=function(){
+    CKEDITOR.replace('content',{
+        customConfig:'config_user.js'   //加载自定义配置文件     
+    });
+
+    $(':input[name=cover]').bind('focusout',function(){
+        var inp=$(this).val();
+        if(inp.indexOf('uploads/images/')==-1){
+            alert('封面地址不正确');
+            $(this).val('');    
+        }else{
+            var year = new Date().getFullYear();
+            var path=inp.replace('images/'+year,'_thumbs/Images');
+            $(this).val(path);
+            $('.cimg').css('background-image','url('+path+')');
+        }
+    });
+}
+
+</script>
+{/block}
+

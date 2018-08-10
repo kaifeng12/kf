@@ -47,12 +47,12 @@ CKEDITOR.editorConfig = function( config ) {
 	
 	
 		//文件的上传管理：加载CKfinder
-config.filebrowserBrowseUrl =	public+'/Admin/ckfinder/ckfinder.html';	
-config.filebrowserImageBrowseUrl = public+'/Admin/ckfinder/ckfinder.html?Type=Images';	
-config.filebrowserFlashBrowseUrl = public+'/Admin/ckfinder/ckfinder.html?Type=Flash';	
-config.filebrowserUploadUrl = public+'/Admin/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';	
-config.filebrowserImageUploadUrl = public+'/Admin/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images';	
-config.filebrowserFlashUploadUrl = public+'/Admin/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash';
+config.filebrowserBrowseUrl =	static+'/admin/ckfinder/ckfinder.html';	
+config.filebrowserImageBrowseUrl = static+'/admin/ckfinder/ckfinder.html?Type=Images';	
+config.filebrowserFlashBrowseUrl = static+'/admin/ckfinder/ckfinder.html?Type=Flash';	
+config.filebrowserUploadUrl = static+'/admin/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files';	
+config.filebrowserImageUploadUrl = static+'/admin/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images';	
+config.filebrowserFlashUploadUrl = static+'/admin/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash';
 	
 
 

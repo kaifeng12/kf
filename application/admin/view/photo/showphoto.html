@@ -83,7 +83,7 @@
     ,auto: false
     ,bindAction: '#uploadsAction'
     ,data:{gid:{$gid}}
-    ,field:'photo[]'
+    ,field:'photo'
     ,choose: function(obj){   
       var files = this.files = obj.pushFile(); //将每次选择的文件追加到文件队列
       //读取本地文件
@@ -128,6 +128,13 @@
       ,tds = tr.children();
       tds.eq(2).html('<span style="color: #FF5722;">上传失败</span>');
       tds.eq(3).find('.demo-reload').removeClass('layui-hide'); //显示重传
+    }
+    ,allDone: function(obj){
+        if(obj.aborted==0){
+            $.msg.success('所以图片上传成功',2,function(){
+                window.location.reload();
+            });
+        } 
     }
   });
 

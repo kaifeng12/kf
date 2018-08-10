@@ -1,0 +1,71 @@
+{extend name="admin@public/base"}
+
+{block name="css"}
+<link rel="stylesheet" href="__STATIC__/admin/css/style.css" media="all" />
+{/block}
+{block name="content"} 
+<div class="edit">
+        <span class="button dropdown">
+            <a href="{:url('logadd')}">发布文章</a>
+        </span>
+        <span class="button dropdown">删除文章</span> 
+</div>
+
+<section class="content">
+    <section class="widget">
+        <header>
+            <span class="icon">&#128200;</span>
+            <hgroup>
+                <h2 style="padding-top:15px" >文章列表</h2>
+            </hgroup>
+        </header>   
+        <div class="logs">
+        <form action="{:url('deletelogs')}" method="post">
+        <input type="hidden" name="type" value='1'>
+        {foreach $logs as $vo}
+            <input type="checkbox" value="{$vo['id']}" name="isdelete[]" id='is' style="float:left; display:none; margin-top:100px">
+            <div class="log" id="{$vo['id']}">
+                <div class="img" style="background-image:url({$vo['cover']});background-position:center; background-repeat:no-repeat;"></div>
+                <div class="d1">
+                    <strong>{$vo['title']}</strong>
+                    <div>{$vo['des']}</div>
+                </div>                
+                <div class="d2">
+                    
+                    <div class="d4">
+                        <span>作者：{$vo['author']}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <span>发表时间：{:date('Y-m-d H:i:s',$vo.date)}</span>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+        </div>
+        <div class="clear"></div>
+        <button class="blue" onClick="return window.confirm('确定删除？')" style="margin:20px 0px 0px 50%; display:none;" >确定删除</button>
+        </form>
+    </section>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+$().ready(function(e) {
+    $('.log').bind('click',function(){
+        location.href="{:url('logedit','',false)}/id/"+this.id;
+    });
+    $('.dropdown:eq(1)').toggle(function(){
+        //$('.log').css({'margin':'0px','margin-right':'8px'});
+        $(':checkbox').css('display','inline');
+        $('button').css('display','inline');
+        $(this).html('取消删除');
+    },function(){
+        //$('.log').css({'margin':'11px','margin-right':'0px'});
+        $(':checkbox').css('display','none');
+        $('button').css('display','none');
+        $(this).html('删除文章');   
+    });
+});
+</script>
+{/block}
+
+

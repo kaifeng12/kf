@@ -107,7 +107,7 @@ a:link, a:active, a:visited {
 
 section.content {
 	margin: 0px 0 0 0px;
-	padding: 10px 25px;
+	padding: 10px 5px;
 	
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -511,7 +511,7 @@ body.login {
 .logs{ padding:10px;}
 .log{width:485px;
  	height:170px;
-   	margin:11px;
+   	margin:8px;
     float:left; 
 	background:#FFF;
 	padding:20px

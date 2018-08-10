@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+	<meta charset="utf-8">
+	<title>右边</title>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta name="robots" content="" />
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+<link rel="stylesheet" href="__PUBLIC__/Admin/css/style.css" media="all" />
+    <script src="__PUBLIC__/jquery/jquery.js"></script>
+    <script>
+	var controller='__CONTROLLER__/';
+    var module='__MODULE__/';
+    </script>
+    <script src="__PUBLIC__/Admin/js/log.js"></script>
+</head>
+
+<body>
+
+<div class="edit">
+		<span class="button dropdown">
+			<a href="__MODULE__/Log/logadd">发布文章</a>
+		</span>
+        <span class="button dropdown">删除文章</span> 
+</div>
+
+<section class="content">
+	<section class="widget">
+		<header>
+			<span class="icon">&#128200;</span>
+			<hgroup>
+				<h2 style="padding-top:15px" >文章列表</h2>
+			</hgroup>
+		</header>	
+		<div class="logs">
+        <form action="__MODULE__/Log/deletelogs" method="post">
+        <volist name='logs' id='vo'>
+        	<input type="checkbox" value="{$vo['l_id']}" name="isdelete[]" id='is' style="float:left; display:none; margin-top:100px">
+        	<div class="log" id="{$vo['l_id']}">
+            	<div class="img" style="background-image:url({$vo['l_cover']});background-position:center; background-repeat:no-repeat;"></div>
+                <div class="d1">
+                	<strong>{$vo['l_title']}</strong>
+                	<div>{$vo['l_des']}</div>
+                </div>                
+                <div class="d2">
+                	
+                	<div class="d4">
+                		<span>作者：{$vo['l_author']}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                		<span>发表时间：{$vo['l_date']|date='Y-m-d H:i:s',###}</span>
+                	</div>
+                </div>
+            </div>
+        </volist>
+        </div>
+   		<div class="clear"></div>
+        <button class="blue" onClick="return window.confirm('确定删除？')" style="margin:20px 0px 0px 515px; display:none;" >确定删除</button>
+        </form>
+	</section>
+	
+
+</section>
+
+</body>
+</html>
+

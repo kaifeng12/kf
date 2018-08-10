@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>编辑文章</title>
+<link rel="stylesheet" href="__PUBLIC__/Admin/css/style.css" media="all" />
+<script src="__PUBLIC__/Admin/ckeditor/ckeditor.js"></script>
+<script>
+var public='__PUBLIC__';
+window.onload=function(){
+	CKEDITOR.replace('l_content',{
+		customConfig:'config_user.js'	//加载自定义配置文件	
+	});
+	
+	
+}
+
+function check(){
+	if(!window.confirm('确定提交修改？')){
+		return false;
+	}
+	var title= document.getElementsByTagName('input');
+	var text= document.getElementsByTagName('textarea');
+	if(title[0].value=='' || text[0].value=='' ){
+		alert('内容不完整');
+		return false;
+	}
+}
+
+</script>
+
+</head>
+	
+<body>
+
+
+<section class="content">
+	<section class="widget">
+		<header>
+			<span class="icon">&#128200;</span>
+			<hgroup>
+				<h2 style="padding-top:15px" >发布文章</h2>
+			</hgroup>
+		</header>	
+		<div class="main">
+        	<div class="msg">
+            	<form action="__CONTROLLER__/add" method="post">
+            	<font size="4">文章标题：</font><input type="text"  name="l_title" /><br />
+                <font size="4">文章描述：</font><br /><br />
+                <textarea name="l_des"></textarea><br /><br />
+                <font size="4">文章类型：</font>
+                <select name="l_type">
+                	<option value="0">生活日志</option>
+                    <option value="1">技术杂谈</option>
+                </select>
+                <br /><br /><br /><br /><br />
+            </div>
+        	<div class="text">
+        		<textarea name="l_content" >
+            	
+            	</textarea>
+            </div>
+            <button class="blue" onclick="return check()">发布</button>
+            </form>
+        </div>
+
+	</section>
+	
+
+</section>
+
+</body>
+</html>

@@ -1,28 +1,14 @@
 <?php
 namespace app\admin\controller;
 
-use think\Controller;
+use controller\BaseAdmin;
 use think\Db;
 use think\App;
-use think\captcha\Captcha;
 
-class Log extends Controller {
+class Log extends BaseAdmin {
     
-    
-    //定义空操作
-    public function _empty(){
-        $action=array('logadd');
-        if(in_array(ACTION_NAME, $action)){
-            checksess();
-            $this->display(ACTION_NAME);
-            exit;
-        }else {
-        echo '您访问的地址不存在';
-        }
-    }
-            
     //生成初始展示页面
-    public function right(){
+    public function logs(){
         checksess();     //验证session
         $log= D('log');
         $logs=$log->where('l_isdelete=0 and l_type=0')->select();
@@ -31,24 +17,17 @@ class Log extends Controller {
     }
         
     //生成技术杂谈页面
-    public function right1(){
-        checksess();     //验证session
-        $log= D('log');
-        $logs=$log->where('l_isdelete=0 and l_type=1')->select();
-        $this->assign('logs',$logs);
-        $this->display('right1');
+    public function talk(){
+        $logs=Db::name('log')->where(['is_deleted'=>0,'type'=>1])->field('content',true)->select();
+        return $this->fetch('',['logs'=>$logs]);
     }
     
     
     //生成编辑文章的页面
     public function logedit(){
-        checksess();     //验证session        
-        if($id=$_GET['id']){
-            $log=D('log');
-            $logs=$log->where('l_id='.$id)->find();
-            $this->assign('logs',$logs);
-            $this->display('logedit');
-        }
+        $id=$this->request->param('id','');
+        $logs=Db::name('log')->where('id',$id)->find();
+        return $this->fetch('',['logs'=>$logs]);
     }
     
     //执行文章编辑
@@ -92,15 +71,15 @@ class Log extends Controller {
     
     //执行删除文章
     public function deletelogs(){
-        checksess();     //验证session
-        $del=$_POST['isdelete'];
-        $data['l_isdelete']='1';
-        $str= implode($del,',');
-        $log= D('log');
-        if($log->where('l_id in ('.$str.')')->save($data)){
-            $this->right();
-            exit;
-        }else echo '删除失败';
+        $ids=$this->request->param('isdelete',[]);
+        $type=$this->request->param('type','1');
+        if($ids){
+            foreach ($ids as $id){
+                Db::name('log')->where('id',$id)->update(['is_deleted'=>1]);
+            }
+        }
+        $url=$type=='1'?'talk':'logs';
+        $this->redirect($url);
     }
 }
     
