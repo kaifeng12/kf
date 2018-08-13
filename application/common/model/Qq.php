@@ -7,8 +7,10 @@ use think\db;
 class Qq extends Model
 {
     
-    public function callback($code){        
-        $url="https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id=101450092&client_secret=df8d25dfe66beebd1f78e8367c0deda2&code={$code}&redirect_uri=http://www.likaifeng.xyz/index/Msg/callback.html";
+    public function callback($code){     
+        $client_id=sys_config('client_id', 'qq');
+        $client_secret=sys_config('client_secret', 'qq');
+        $url="https://graph.qq.com/oauth2.0/token?grant_type=authorization_code&client_id={$client_id}&client_secret={$client_secret}&code={$code}&redirect_uri=http://www.likaifeng.xyz/index/Msg/callback.html";
         $Access_Token=file_get_contents($url);
         if($Access_Token){
             $Openidurl="https://graph.qq.com/oauth2.0/me?{$Access_Token}";
