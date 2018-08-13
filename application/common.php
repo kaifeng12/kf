@@ -92,3 +92,56 @@ function changDate(&$arr,$key,$type=0){
 function sys_config($name,$type){
     return Db::name('config')->where(['name'=>$name,'type'=>$type])->value('value');
 }
+
+/**
+ * curl获取接口数据
+ * @param string $url
+ * @param string $type
+ * @param string $res
+ * @param string $arr
+ */
+function curl($url,$type='get',$res='json',$arr=''){
+    $ch=curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    if ($type=='post'){
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);
+    }
+    
+    $output=curl_exec($ch);
+    
+    if($res='json'){
+        if(curl_errno($ch)){
+            //出错
+            return curl_errno($ch);
+        }else{
+            curl_close($ch);
+            return json_decode($output,true);
+        }
+    }
+}
+
+/**
+ * Emoji原形转换为String
+ * @param string $content
+ * @return string
+ */
+function emojiEncode($content)
+{
+    return json_decode(preg_replace_callback("/(\\\u[ed][0-9a-f]{3})/i", function ($str) {
+        return addslashes($str[0]);
+    }, json_encode($content)));
+}
+
+/**
+ * Emoji字符串转换为原形
+ * @param string $content
+ * @return string
+ */
+function emojiDecode($content)
+{
+    return json_decode(preg_replace_callback('/\\\\\\\\/i', function () {
+        return '\\';
+    }, json_encode($content)));
+}

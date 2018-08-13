@@ -16,16 +16,16 @@
             <div class="fabiao">
                 <img src="__STATIC__/index/images/shuosha1.jpg">
                 {if $login == 1}
-                <div class="sma_yuan" style=" background-image:url({$qhead});border-radius:50%; width:40px; height:40px; background-size:cover;display:inline-block;">
+                <div class="sma_yuan" style=" background-image:url({$head});border-radius:50%; width:40px; height:40px; background-size:cover;display:inline-block;">
                     <span style="display:none"></span>
                 </div>
                 <a class='logout' href="javascript:void(0)" data-url="{:url('logout','','',true)}">                
                     <div style="padding-top:20px; display:inline-block">退出登录</div>
                 </a>
                 {else /} 
-                <img src="__STATIC__/index/images/qlogin.png" style="border-radius:50%; width:40px; height:40px; background-size:cover;" >
-                <a href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101450092&redirect_uri=http://www.likaifeng.xyz/index/Msg/callback.html?state=1200">       
-                    <div style="padding-top:20px; display:inline-block">用qq登录评论</div>
+                <img src="__STATIC__/index/images/{$type=='qq'? 'qlogin.png':'wechat.jpg'}" style="border-radius:50%; width:40px; height:40px; background-size:cover;" >
+                <a href="{:url('api/oauth2',['action'=>'msg','type'=>$type,'state'=>1012])}">       
+                    <div style="padding-top:20px; display:inline-block">{$type=='qq'?'用qq' : '微信'}登录评论</div>
                 </a>
                 {/if}
                     

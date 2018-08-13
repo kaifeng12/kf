@@ -1,10 +1,10 @@
 <?php
 namespace app\index\controller;
 
-use controller\BaseIndex;
 use think\Db;
 use think\App;
-class Wechat extends BaseIndex
+use think\Controller;
+class Wechat extends Controller
 {
     
     public function getToken(){
@@ -14,7 +14,7 @@ class Wechat extends BaseIndex
         $nonce=$this->request->get('nonce');//随机数
         $echostr=$this->request->get('echostr','');//最后要输出的内容，第一次验证才有
         
-        $token=sys_config('token', 'wx');//用户自己定义的token
+        $token=sys_config('token', 'wxtest');//用户自己定义的token
         $tmpArr=[$timestamp,$nonce,$token];//组装
 
         sort($tmpArr,SORT_STRING);//字典序排序
@@ -34,10 +34,10 @@ class Wechat extends BaseIndex
     public function responeMsg(){
         
         $postArr=file_get_contents("php://input");//接受微信post过来的xml数据
+        //Db::name('test')->insert(['name'=>'xml','value'=>$postArr]);
         $xml=simplexml_load_string($postArr,'SimpleXMLElement', LIBXML_NOCDATA);//把xml转成对象
         $eJSON = json_encode($xml);//借助json转换带有CDATA的xml成对象
         $postObj = json_decode($eJSON);
-        
         /*微信关注或取消事件xml格式
         <xml>
             <ToUserName>< ![CDATA[toUser] ]></ToUserName>
@@ -113,7 +113,7 @@ class Wechat extends BaseIndex
                         [
                             'name'=>urlencode('更多图片'),
                             'type'=>'view',
-                            'url'=>'http://www.likaifeng.xyz/index/Photo/photo'
+                            'url'=>'http://www.likaifeng.xyz/index/Photo/index'
                         ]//第一个一级菜单的第二个二级菜单
                     ],
 
@@ -140,8 +140,8 @@ class Wechat extends BaseIndex
         $access_token=cache('access_token');
         if(!$access_token){
             
-            $appid=sys_config('appid', 'wx');
-            $appsecret=sys_config('appsecret', 'wx');
+            $appid=sys_config('appid', 'wxtest');
+            $appsecret=sys_config('appsecret', 'wxtest');
             $url='https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid='.$appid.'&secret='.$appsecret;
             
             $arr=$this->curl($url);
@@ -154,7 +154,13 @@ class Wechat extends BaseIndex
     }
     
     
-    //curl获取接口数据
+    /**
+     * curl获取接口数据
+     * @param string $url
+     * @param string $type
+     * @param string $res
+     * @param string $arr
+     */
     private function curl($url,$type='get',$res='json',$arr=''){
         $ch=curl_init();        
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -165,13 +171,13 @@ class Wechat extends BaseIndex
         }
         
         $output=curl_exec($ch);
-        curl_close($ch);
+        
         if($res='json'){
             if(curl_errno($ch)){
                 //出错
                 return curl_errno($ch);
             }else{
-                
+                curl_close($ch);
                 return json_decode($output,true);
             }
         }
@@ -189,6 +195,34 @@ class Wechat extends BaseIndex
             $change_after.=$temp_str[1].$temp_str[0];
         }
         return strtoupper($change_after);
+    }
+    
+    
+    public function getUserInfo(){
+        $is_wx=strpos($_SERVER["HTTP_USER_AGENT"], 'MicroMessenger');
+        dump($_SERVER["HTTP_USER_AGENT"]);
+        if($is_wx){
+            halt('yes');
+        }else halt('no');
+        $appid=sys_config('appid', 'wxtest');
+        $redirect_uri=url('oauth_callback','','html',true);
+        $url="https://open.weixin.qq.com/connect/oauth2/authorize?appid={$appid}&redirect_uri={$redirect_uri}&response_type=code&scope=snsapi_userinfo&state=1012#wechat_redirect";
+        $this->redirect($url);
+    }
+    
+    public function oauth_callback(){
+        $code=$this->request->param('code','');
+        $state=$this->request->param('state','');
+        if(empty($code) || empty($state)) return false;
+        $appid=sys_config('appid', 'wxtest');
+        $appsecret=sys_config('appsecret', 'wxtest');
+        $url="https://api.weixin.qq.com/sns/oauth2/access_token?appid={$appid}&secret={$appsecret}&code={$code}&grant_type=authorization_code";
+        $res=$this->curl($url);
+        if(isset($res['errcode'])) return 'error';
+        
+        $url="https://api.weixin.qq.com/sns/userinfo?access_token={$res['access_token']}&openid={$res['openid']}&lang=zh_CN";
+        $userInfo=$this->curl($url);
+        halt($userInfo);
     }
     
 

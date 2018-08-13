@@ -19,7 +19,9 @@ class Log extends BaseIndex
     //技术杂谈页面
     public function talk(){
         $logs=model('log')->getNewLog(999,1,2);      //获得按时间排序的所有技术杂谈文章
-        return $this->fetch('',['logs'=>$logs]);
+        $is_wx=strpos($_SERVER["HTTP_USER_AGENT"],'MicroMessenger');
+        $type=$is_wx?'wx':'qq';
+        return $this->fetch('',['logs'=>$logs,'type'=>$type]);
     }
     
     
@@ -30,9 +32,9 @@ class Log extends BaseIndex
             //判断是否登录
             $login=0;
             
-            if(session('qname') && session('qhead') && session('openid')){
-                $this->assign('qname',session('qname'));
-                $this->assign('qhead',session('qhead'));
+            if(session('name') && session('head') && session('openid')){
+                $this->assign('name',session('name'));
+                $this->assign('head',session('head'));
                 $this->assign('openid',session('openid'));
                 $login=1;
             }          
@@ -84,8 +86,8 @@ class Log extends BaseIndex
     }
     
     public function logout(){
-        session('qname',null);
-        session('qhead',null);
+        session('name',null);
+        session('head',null);
         session('openid',null);
         echo '1';
     }

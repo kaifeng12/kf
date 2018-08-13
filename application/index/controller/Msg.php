@@ -11,14 +11,15 @@ class Msg extends BaseIndex
     public function msg(){
         $first=model('msg')->getMsg();
         $login=0;
-
-        if(session('qname') && session('qhead') && session('openid')){
-            $this->assign('qname',session('qname'));
-            $this->assign('qhead',session('qhead'));
+        $is_wx=strpos($_SERVER["HTTP_USER_AGENT"],'MicroMessenger');
+        $type=$is_wx?'wx':'qq';
+        if(session('name') && session('head') && session('openid')){
+            $this->assign('name',session('name'));
+            $this->assign('head',session('head'));
             $this->assign('openid',session('openid'));
             $login=1;
         }
-        return $this->fetch('',['login'=>$login,'msgss'=>$first]);
+        return $this->fetch('',['login'=>$login,'msgss'=>$first,'type'=>$type]);
     }
     
     public function add(){
@@ -33,6 +34,7 @@ class Msg extends BaseIndex
             $this->error('发表失败，请稍候再试');
         }        
     }
+    
 
     
     
@@ -82,8 +84,8 @@ class Msg extends BaseIndex
     }
     
     public function logout(){
-        session('qname',null);
-        session('qhead',null);
+        session('name',null);
+        session('head',null);
         session('openid',null);
         echo "1";
     }
