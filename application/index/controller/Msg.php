@@ -43,4 +43,15 @@ class Msg extends BaseIndex
     }
     
 
+    public function wx_login(){
+        $wechat=model('wechat');
+        if($this->request->get('code','')){
+            $res=$wechat->callback(0);
+            if(isset($res['errcode'])) halt($res);
+            $userInfo=$wechat->getUserInfo($res['openid']);
+            if(isset($userInfo['errcode'])) return $userInfo;
+        }
+        $wechat->oauth2(0);
+    }
+    
 }

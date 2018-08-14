@@ -26,5 +26,6 @@ class BaseIndex extends Controller {
         $this->assign('new',$log);
 
     }
+    
 
 }

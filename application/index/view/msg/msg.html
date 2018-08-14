@@ -6,6 +6,33 @@
 {/block}
 {block name="script"}
     <script src="__STATIC__/index/js/msg.js"></script>
+    <script type="text/javascript">
+    $(function(){
+        $('.wx_login').on('click',function(){
+            var index = $.msg.loading();
+            $.ajax({
+                url: "{:url('wx_login')}",
+                type: 'post',
+                data:{},
+                success:function(res)
+                {
+                    $.msg.close(index);
+                    if(res.code == '1')
+                    {
+                        $.msg.tips(ret.msg, 2);
+                    } else {
+                        $.msg.tips(ret.msg, 2);
+                    }
+                },
+                error:function(){
+                    $.msg.close(index);
+                    $.msg.tips('服务繁忙，请稍后再试！', 2);
+                    
+                }
+            });
+        })
+    });
+    </script>
 {/block}
 {block name="content"}
     <div class="main-content col11">
@@ -24,7 +51,7 @@
                 </a>
                 {else /} 
                 <img src="__STATIC__/index/images/{$type=='qq'? 'qlogin.png':'wechat.jpg'}" style="border-radius:50%; width:40px; height:40px; background-size:cover;" >
-                <a href="{:url('api/oauth2',['action'=>'msg','type'=>$type,'state'=>1012])}">       
+                {if $type=='qq'}<a href="{:url('api/oauth2',['action'=>'msg','type'=>$type,'state'=>1012])}">{else /}<a class="wx_login">{/if}    
                     <div style="padding-top:20px; display:inline-block">{$type=='qq'?'用qq' : '微信'}登录评论</div>
                 </a>
                 {/if}

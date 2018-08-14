@@ -8,7 +8,9 @@ use think\App;
 use think\Controller;
 class Api extends Controller
 {
-    
+    /**
+     * 判断发起授权
+     */
     public function oauth2(){
         $action=$this->request->param('action','');
         $type=$this->request->param('type','');
@@ -28,6 +30,9 @@ class Api extends Controller
         if(isset($url)) $this->redirect($url);
     }
     
+    /**
+     * 授权回调
+     */
     public function callback(){
         $action=$this->request->param('action','');
         $type=$this->request->param('type','');

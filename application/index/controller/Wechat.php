@@ -147,7 +147,7 @@ class Wechat extends Controller
             $arr=$this->curl($url);
             
             $access_token=$arr['access_token'];
-            cache('access_token',$access_token,['expires'=>$arr['expires_in']]);
+            cache('access_token',$access_token,$arr['expires_in']);
             
         }
         return $access_token;
