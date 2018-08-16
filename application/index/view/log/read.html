@@ -4,6 +4,24 @@
     <style>.block{ background:#FAFAFA;}</style>
 {/block}
 {block name="script"}
+    <script type="text/javascript">
+    $(function(){
+        $('.logout').bind('click',function(){
+            var url=$('.logout').attr('data-url'),
+            data='',
+            self=$(this),
+            htm='<img src="/static/index/images/{$type=='qq'? 'qlogin.png':'wechat.jpg'}" style="border-radius:50%; width:40px; height:40px; background-size:cover;" >{if $type=='qq'}<a href="{:url('api/oauth2',['action'=>'msg','type'=>$type,'state'=>1012])}">{else /}<a href="{:url('wx_login')}">{/if}<div style="padding-top:20px; display:inline-block">{$type=='qq'?'用qq' : '微信'}登录评论</div></a>';
+            $.get(url,data,function(res){
+                if(res.code==1){
+                    $.msg.tips(res.msg,1);
+                    self.after(htm);
+                    self.prev().remove();
+                    self.remove();
+                }
+            });
+        });
+    });
+    </script>
     <script src="__STATIC__/index/js/msg.js"></script>
 {/block} 
 
@@ -32,7 +50,7 @@
     	                <a href="javascript:void(0)" data-url="{:url('logout','','',true)}" class="logout"><div style="padding-top:20px; display:inline-block">退出登录</div></a>
     	                {else /} 
     	                <img src="__STATIC__/index/images/{$type=='qq'? 'qlogin.png':'wechat.jpg'}" style="border-radius:50%; width:40px; height:40px; background-size:cover;" >
-        	        	<a href="{:url('api/oauth2',['action'=>'msg','type'=>$type,'state'=>1012])}">                
+        	        	{if $type=='qq'}<a href="{:url('api/oauth2',['action'=>'read','type'=>$type,'state'=>1012,'param'=>$log.id])}">{else /}<a href="{:url('wx_login')}">{/if}                
         	        		<div style="padding-top:20px; display:inline-block">{$type=='qq'?'用qq' : '微信'}登录评论</div>
         	        	</a>
     	                {/if}

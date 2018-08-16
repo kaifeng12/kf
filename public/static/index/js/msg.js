@@ -57,18 +57,6 @@ $().ready(function(e) {
 		$(this).prev()[0].submit();
 	});
 	
-	$('.logout').bind('click',function(){
-		var url=$('.logout').attr('data-url');
-		var data='';
-		var self=$(this);
-		var htm='<img src="/static/index/images/qlogin.png" style="border-radius:50%; width:40px; height:40px; background-size:cover;" ><a href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101450092&redirect_uri=http://www.likaifeng.xyz/index/Msg/callback.html?state=12{$log.id}"><div style="padding-top:20px; display:inline-block">用qq登录评论</div></a>';		
-		$.get(url,data,function(msg){
-			if(msg=='1'){
-				self.after(htm);
-				self.prev().remove();
-				self.remove();
-			}
-		});
-	});
+
 
 });

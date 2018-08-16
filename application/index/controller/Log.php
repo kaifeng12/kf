@@ -28,6 +28,8 @@ class Log extends BaseIndex
     //阅读文章显示
     public function read(){
         $id=$this->request->param('id');
+        $is_wx=strpos($_SERVER["HTTP_USER_AGENT"],'MicroMessenger');
+        $type=$is_wx?'wx':'qq';
         if($id){
             //判断是否登录
             $login=0;
@@ -47,7 +49,7 @@ class Log extends BaseIndex
             
             changDate($log,'date',1);
             $comment=model('comment')->getCom($id);
-            return $this->fetch('',['login'=>$login,'comment'=>$comment,'log'=>$log]);
+            return $this->fetch('',['login'=>$login,'comment'=>$comment,'log'=>$log,'type'=>$type]);
         }else{
             echo '你访问的地址不存在';
         }
@@ -86,10 +88,14 @@ class Log extends BaseIndex
     }
     
     public function logout(){
-        session('name',null);
-        session('head',null);
-        session('openid',null);
-        echo '1';
+        $this->base_logout();
+    }
+    
+    /**
+     * 微信登录
+     */
+    public function wx_login(){
+        $this->login('wx');
     }
     
 

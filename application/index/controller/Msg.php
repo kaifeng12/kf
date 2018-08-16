@@ -22,6 +22,7 @@ class Msg extends BaseIndex
         return $this->fetch('',['login'=>$login,'msgss'=>$first,'type'=>$type]);
     }
     
+    
     public function add(){
         $rid=$this->request->param('rid');
         $openid=session('openid');
@@ -36,22 +37,14 @@ class Msg extends BaseIndex
     }
     
     public function logout(){
-        session('name',null);
-        session('head',null);
-        session('openid',null);
-        echo "1";
+        $this->base_logout();
     }
     
-
+    /**
+     * 微信登录
+     */
     public function wx_login(){
-        $wechat=model('wechat');
-        if($this->request->get('code','')){
-            $res=$wechat->callback(0);
-            if(isset($res['errcode'])) halt($res);
-            $userInfo=$wechat->getUserInfo($res['openid']);
-            if(isset($userInfo['errcode'])) return $userInfo;
-        }
-        $wechat->oauth2(0);
+        $this->login('wx');
     }
     
 }
