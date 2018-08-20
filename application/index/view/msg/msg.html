@@ -41,7 +41,7 @@
                     <div style="padding-top:20px; display:inline-block">退出登录</div>
                 </a>
                 {else /} 
-                <img src="__STATIC__/index/images/{$type=='qq'? 'qlogin.png':'wechat.jpg'}" style="border-radius:50%; width:40px; height:40px; background-size:cover;" >
+                <img src="__STATIC__/index/images/{$type=='qq'? 'qlogin.png':'wechat.png'}" style="border-radius:50%; width:40px; height:40px; background-size:cover;" >
                 {if $type=='qq'}<a href="{:url('api/oauth2',['action'=>'msg','type'=>$type,'state'=>1012])}">{else /}<a href="{:url('wx_login')}">{/if}    
                     <div style="padding-top:20px; display:inline-block">{$type=='qq'?'用qq' : '微信'}登录评论</div>
                 </a>
