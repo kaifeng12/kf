@@ -32,7 +32,7 @@ class Visit extends Model
         }
         $todb=clone $db; 
         $total=$todb->count();
-        $data=$db->order('v.id asc')->limit($limit*($page-1),$limit)->select()->toArray();
+        $data=$db->order('v.id desc')->limit($limit*($page-1),$limit)->select()->toArray();
         return [
             'code'=>0,
             'msg'=>'',
