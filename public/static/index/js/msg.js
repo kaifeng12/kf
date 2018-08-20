@@ -23,6 +23,18 @@ $().ready(function(e) {
 		if(val==''){
 			return false;	
 		}
+		// var index=$.msg.loading();
+		// $.post(controller+'/delete',{id:mid},function(res){
+		// 	if(msg=='1'){
+		// 		$.msg.success('删除成功',1,function(){
+		// 			self.parent().parent().remove();
+		// 		})	
+		// 	}else{
+		// 		$.msg.error('删除失败',2);
+		// 	}
+		// });
+
+
 		$(this).prev()[0].submit();
 	});
 	

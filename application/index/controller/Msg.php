@@ -25,11 +25,13 @@ class Msg extends BaseIndex
     
     public function add(){
         $rid=$this->request->param('rid');
+        $is_wx=strpos($_SERVER["HTTP_USER_AGENT"],'MicroMessenger');
+        $type=$is_wx?'wx':'qq';
         $openid=session('openid');
 		if(!$openid) $this->error('页面不存在！');
 		$text=$this->request->param('text');
         if(!$text) $this->error('发表失败，请稍候再试');
-        if(model('msg')->addmsg($openid,$text,$rid)){            
+        if(model('msg')->addmsg($openid,$text,$rid,$type)){            
             $this->success('发表成功','msg');
         }else{
             $this->error('发表失败，请稍候再试');

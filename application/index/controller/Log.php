@@ -78,11 +78,13 @@ class Log extends BaseIndex
             $this->error('发表失败，请稍候再试');
         }
         $openid=session('openid');
+        $is_wx=strpos($_SERVER["HTTP_USER_AGENT"],'MicroMessenger');
+        $type=$is_wx?'wx':'qq';
         $comment=model('comment');
-        if($comment->addComment($openid,$text,$rid,$id)){            
+        if($comment->addComment($openid,$text,$rid,$id,$type)){            
             $this->success('发表成功');
         }else{
-            $this->error('发表失败，'.$comment->msg);
+            $this->error('发表失败');
         }
         
     }
