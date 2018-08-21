@@ -43,7 +43,7 @@ class Comment extends Model
                 $wx=Db::name('WechatFans')->where('id',$v['wid'])->field('nickname as name,headimgurl as head,openid')->find();
                 $v=array_merge($v,$wx);
             }
-            
+            $v['name']=emojiDecode($v['name']);
         }
         return $coments;
     }

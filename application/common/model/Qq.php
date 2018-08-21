@@ -23,7 +23,7 @@ class Qq extends Model
             $QQUserInfo = json_decode($json,true);
             if(isset($QQUserInfo['figureurl_qq_2']) && isset($QQUserInfo['nickname'])){
                 $qinfo=[
-                    'name' => $QQUserInfo['nickname'],
+                    'name' =>emojiEncode($QQUserInfo['nickname']),
                     'head' => $QQUserInfo['figureurl_qq_2'],
                     'openid' => $Openid
                     
