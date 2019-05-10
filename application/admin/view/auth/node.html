@@ -1,0 +1,202 @@
+{extend name="admin@public/base"}
+
+{block name="css"}
+<style type="text/css">
+	form {margin-top: 20px;}
+	.controller-title{
+		font-weight: bold;
+	}
+</style>
+{/block}
+
+{block name="content"}
+<form class="layui-form" action="" autocomplete='off'>
+	<div class="layui-tab layui-tab-card">
+		<ul class="layui-tab-title module-title">
+			{foreach $nodeData as $module => $v}
+		    	<!-- <li class="layui-this">网站设置</li> -->
+	    	<li>{$module}</li>
+		    {/foreach}
+	  	</ul>
+	  	<div class="layui-tab-content" style="height: 100px;">
+	  		{foreach $nodeData as $module}
+		    <!-- <div class="layui-tab-item layui-show">1</div> -->
+		    <div class="layui-tab-item">
+				<table class="layui-table border-none" lay-skin="line">
+				{foreach $module as $controller => $nodes}
+					<tr>
+						<td class="controller-title">|— &nbsp;&nbsp;&nbsp;{$controller}</td>
+						<td><input type="text" class="layui-input" value="控制器节点"></td>
+						<td><input type="checkbox" lay-skin="primary" name="login" lay-filter="contr" data-contr-login="{$controller}" value='{$controller}' title="全部登录控制"></td>
+						<td><input type="checkbox" lay-skin="primary" name="auth" lay-filter="contr" data-contr-auth="{$controller}" value='{$controller}' title="全部权限控制"></td>
+						<td><input type="checkbox" lay-skin="primary" name="menu" lay-filter="contr" data-contr-menu="{$controller}" value='{$controller}' title="全部菜单控制"></td>
+					</tr>			
+					{foreach $nodes as $node}
+					<tr>
+						<td>|— &nbsp;&nbsp; |— &nbsp;&nbsp;&nbsp; {$node}</td>
+						<td><input type="text" class="layui-input" name="nodetitle" data-node="{$node}" value="" ></td>
+						<td><input type="checkbox" lay-skin="primary" name="login" lay-filter="node" data-contr-login="{$controller}" value='{$node}' title="登录控制"></td>
+						<td><input type="checkbox" lay-skin="primary" name="auth" lay-filter="node" data-contr-auth="{$controller}" value='{$node}'  title="权限控制"></td>
+						<td><input type="checkbox" lay-skin="primary" name="menu" lay-filter="node" data-contr-menu="{$controller}" value='{$node}'  title="菜单控制"></td>
+					</tr>					
+					{/foreach}
+				{/foreach}			
+
+				</table>
+
+		    </div>
+		    {/foreach}
+	  	</div>
+
+	</div>
+</form>
+{/block}
+
+{block name="script"}
+
+<script>
+	$('.module-title').find('li')[0].click();
+	//console.log($('[data-login="admin/admin/logout"]').prop('checked'));
+	layui.use('form', function(){
+		var form = layui.form;
+
+		//初始化数据
+		var nodeInfo = {$nodeInfo|json_encode|raw};
+		$('[lay-filter="node"]').each(function(index,item){
+			if(nodeInfo[item.value]!==undefined){
+				if(nodeInfo[item.value]['is_'+item.name]==1){
+					item.checked = true;
+				}else{
+					item.checked = false;
+				}
+			}else{
+				item.checked = false;
+			}
+			
+		})
+		$('[name="nodetitle"]').each(function(index,item){
+			if(nodeInfo[$(item).data('node')]!==undefined){
+				item.value = nodeInfo[$(item).data('node')]['title'];
+				$(item).attr('data-value',item.value);
+			}
+		})
+		syncnode();
+
+		form.on('checkbox(contr)', function(data){
+			var elem = data.elem, 
+			type = elem.name,
+			is_checked = elem.checked,
+			info ={},
+			nodeData=[];
+			$('[data-contr-'+type+'="'+data.value+'"]').each(function(index,item){
+				item.checked = is_checked;
+				if($(item).attr('lay-filter') == 'node'){
+					nodeData.push(item.value)
+				}
+			})
+			form.render('checkbox')
+
+			info = {type:type,checked:is_checked,nodes:nodeData};
+			var index = $.msg.loading();
+            $.ajax({
+                url: "{:url('change')}", type: 'post', data: info, success: function (ret) {
+                    $.msg.close(index);
+                    if (ret.code !== 1) {
+                        $.msg.error(ret.msg, 2);
+                        var toChecked = !ret.data.checked;
+						$('[data-contr-'+type+'="'+data.value+'"]').each(function(index,item){
+							item.checked = toChecked;
+						})   
+						form.render('checkbox');               
+                    }
+                }
+            });
+			
+		})
+
+		form.on('checkbox(node)', function(data){
+			var elem = data.elem,
+			type = elem.name,
+			is_checked = elem.checked,
+			info ={},
+			contr = $(elem).attr('data-contr-'+type),
+			contrDom = $('[data-contr-'+type+'="'+contr+'"][lay-filter="contr"]')[0],//当前选择的控制器节点
+			brotherNode = $('[lay-filter="node"][data-contr-'+type+'="'+contr+'"][value!="'+elem.value+'"]'),//当前选择的兄弟节点
+			isAllSelect = 1,
+			contrAction = '';
+
+			// if(!is_checked && contrDom.checked){
+			// 	//解除全选
+			// 	contrDom.checked = false;
+			// 	contrAction = false;
+			// }
+			
+			// if(is_checked){
+			// 	brotherNode.each(function(index,item){
+			// 		if(item.checked == false) isAllSelect = 0;//非全选
+			// 	})
+			// 	if(isAllSelect == 1){
+			// 		//全选
+			// 		contrDom.checked = true;
+			// 		contrAction = true;
+			// 	}
+			// }
+			// form.render('checkbox'); 
+
+			syncnode();
+			info = {type:type,checked:is_checked,nodes:[elem.value]};
+			var index = $.msg.loading();
+            $.ajax({
+                url: "{:url('change')}", type: 'post', data: info, success: function (ret) {
+                    $.msg.close(index);
+                    if (ret.code !== 1) {
+                        $.msg.error(ret.msg, 2);
+                    	contrDom.checked = !contrAction;//还原控制器节点状态
+                    	elem.checked = !is_checked;
+						form.render('checkbox');         
+                    }
+                }
+            });
+		})
+
+		$('input[name="nodetitle"]').on('blur',function(){
+			var node = $(this).data('node'),
+			info = {type : 'title',nodes : node,title : this.value};
+			if($('[data-node="'+node+'"]').attr('data-value') == this.value) return false;//@why 使用$(this)不能获取到最新的值
+
+			var index = $.msg.loading();
+            $.ajax({
+                url: "{:url('change')}", type: 'post', data: info, success: function (ret) {
+                    $.msg.close(index);
+                    if (ret.code !== 1) {
+                        $.msg.error(ret.msg, 2);        
+                    }else{
+                    	$('[data-node="'+node+'"]').attr('data-value',info.title);//@why 此处修改data-value值后，若前面使用$(this)不能获得改变后的data-value值
+                    }
+                    
+                }
+            });			
+		})
+
+		//同步更新数据
+		function syncnode(){
+			$('[lay-filter="contr"]').each(function(inde,item){
+				var type=item.name,contr=item.value,isAllSelect=1,checked=item.checked;
+				$('[lay-filter="node"][name="'+type+'"][data-contr-'+type+'="'+contr+'"]').each(function(i,elem){
+					if(elem.checked == false) isAllSelect=0;
+				})
+				if(checked == true && isAllSelect==0){					
+					item.checked = false;					
+				}else if(checked == false && isAllSelect==1){
+					item.checked=true;			
+				}
+
+			})
+			form.render('checkbox'); 
+		}
+
+
+	});
+
+</script>
+{/block}

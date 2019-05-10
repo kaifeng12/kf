@@ -6,6 +6,10 @@
   <title>kaifeng•博客</title>
   <link href="__STATIC__/index/images/ico.ico" rel="shortcut icon">
   <link rel="stylesheet" href="__STATIC__/plugs/layui/css/layui.css">
+  <style type="text/css">
+    .button-area{margin: 30px 0;text-align: center;}
+    .color-green{color: #29b115};
+  </style>
   	{block name="css"}{/block}
 </head>
 <body class="layui-layout-body">
@@ -23,7 +27,7 @@
           <dd><a href="javascript:void(0)" class="cpwd">修改密码</a></dd>
         </dl>
       </li>
-      <li class="layui-nav-item"><a href="{:url('admin/logout')}">退出</a></li>
+      <li class="layui-nav-item"><a href="javascript:void(0)" onclick="logout()">退出</a></li>
     </ul>
   </div>
   
@@ -41,6 +45,15 @@
         <li class="layui-nav-item"><a href="{:url('msg/index')}">留言板</a></li>
         <li class="layui-nav-item"><a href="{:url('photo/index')}">相册</a></li>
         <li class="layui-nav-item"><a href="{:url('visit/index')}">访问统计</a></li>
+        <li class="layui-nav-item layui-nav-itemed">
+          <a class="" href="javascript:;">权限管理</a>
+          <dl class="layui-nav-child">
+            <dd><a href="{:url('auth/node')}">节点管理</a></dd>
+            <dd><a href="{:url('auth/index')}">角色管理</a></dd>
+          </dl>
+        </li>  
+        <li class="layui-nav-item"><a href="{:url('user/index')}">用户管理</a></li>
+
       </ul>
     </div>
   </div>
@@ -58,10 +71,22 @@
 <script src="__STATIC__/plugs/jquery/jquery.js"></script>
 <script src="__STATIC__/plugs/layui/layui.all.js"></script>
 <script src="__STATIC__/admin/js/admin.js"></script>
+
 <script type="text/javascript">
     var controller="{:url('@'.request()->module().'/'.request()->controller().'','','',true)}";
     var module = "{:url('@'.request()->module().'','','',true)}";
-    var uid={:session('user.id')}
+    var uid={:session('user.id')};
+    function logout(){
+        $.ajax({
+            url: "{:url('admin/admin/logout')}", type: 'post', data: {}, success: function (res) {
+                if (res.code === 1) {
+                    $.msg.success(res.msg,2,function(){
+                        window.location.href = "{:url('admin/login/index')}";
+                    });
+                }
+            }
+        });
+    }
 </script>
 {block name="script"}{/block}
 </body>

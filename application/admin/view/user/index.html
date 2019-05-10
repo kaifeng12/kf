@@ -1,0 +1,92 @@
+{extend name="admin@public/base"}
+
+{block name="css"}
+<style type="text/css">
+.toolbutton{
+	margin : 10px 0 0 20px;
+}
+.desc{
+	color: #999;
+}
+.layui-btn{
+	margin-right: 5px;
+}
+</style>
+{/block}
+
+{block name="content"}
+	<button data-modal='{:url("add")}' data-title="添加用户" class='layui-btn layui-btn-sm layui-btn-primary toolbutton'>添加用户</button>
+
+    <table class="layui-hide" id="table" lay-filter="table"></table>
+    <script type="text/html" id="modify">
+        <a class="layui-btn layui-btn-xs" data-title="修改密码" lay-event="edit" data-modal='{:url("change_pwd")}?id={{d.id}}'>修改密码</a>
+        <a class="layui-btn layui-btn-xs" data-title="修改信息" lay-event="edit" data-modal='{:url("edit")}?id={{d.id}}'>修改信息</a>        
+        <a lay-event="apply" class="layui-btn layui-btn-xs" data-title="修改信息" data-modal='{:url("apply")}?id={{d.id}}'>授权</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>    
+
+{/block}
+
+{block name="script"}
+
+<script>
+layui.use('table', function(){
+    var table = layui.table
+    ,layer = layui.layer
+    ,form = layui.form
+    ,laydate=layui.laydate;
+  
+    var tableIns=table.render({
+        elem: '#table'
+        ,url:'{:url("index")}'
+        ,method : 'post'
+        ,cellMinWidth: 80
+        ,cols: [[
+            {type:'numbers'}
+            ,{type: 'checkbox'}
+            ,{field:'head', title:'头像', width:200, templet: function(d){
+                return '<img class="layui-nav-img" src="'+d.head+'">';
+            }}
+            ,{field:'name', title:'账号', width:200}
+            ,{field:'net_name', title:'昵称',width:400}
+            ,{fixed: 'right', title:'操作', toolbar: '#modify'}
+        ]]
+        ,page: true
+        ,limits: [10,20,50,100]
+        ,limit:10
+    });
+
+    table.on('tool(table)',function(obj){
+        if($.inArray(obj.event,['delete']) == -1) return false;
+        if(obj.event == 'delete'){
+            $.msg.confirm('确定删除？',function(){
+                $.post("{:url('delete')}",{id:obj.data.id},function (res) {
+                    if(res.code !== 1){
+                        $.msg.error(res.msg);
+                    }else{
+                        $.msg.success(res.msg,1,function(){
+                            table.reload('table')
+                        });
+                        
+                    }            
+                });                
+            })
+            return false;
+        }
+        // $.post("{:url('modify')}",{id:obj.data.id,act:obj.event},function (res) {
+        //     if(res.code !== 1){
+        //         $.msg.error(res.msg);
+        //     }else{
+        //         $.msg.success(res.msg,1,function(){
+        //             table.reload('table')
+        //         });
+                
+        //     }            
+        // });
+
+    })
+
+
+});
+</script>
+{/block}

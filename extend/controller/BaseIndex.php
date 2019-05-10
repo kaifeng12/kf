@@ -14,8 +14,7 @@ class BaseIndex extends Controller {
         $ip=$request->ip();
         $status=model('visit')->ip_filter($ip);
         if($status==404){
-            echo "<b style='font-size:50px'>forbidden</b>";
-            exit;
+            throw new \think\exception\HttpException(404, '');
         }
         
         list($module, $controller, $action) = [$request->module(), $request->controller(), $request->action()];

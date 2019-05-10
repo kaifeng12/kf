@@ -1,0 +1,115 @@
+{extend name="admin@public/base"}
+
+{block name="css"}
+<style type="text/css">
+.toolbutton{
+	margin : 10px 0 0 20px;
+}
+.desc{
+	color: #999;
+}
+.layui-btn{
+	margin-right: 5px;
+}
+</style>
+{/block}
+
+{block name="content"}
+	<button data-modal='{:url("role_form")}' data-title="添加权限" class='layui-btn layui-btn-sm layui-btn-primary toolbutton'>添加权限</button>
+
+    <table class="layui-hide" id="table" lay-filter="table"></table>
+    <script type="text/html" id="modify">
+        <a class="layui-btn layui-btn-xs" lay-event="edit" data-modal='{:url("role_form")}?id={{d.id}}'>编辑</a>
+        <a lay-event="apply" href="javascript:void(0)" class="layui-btn layui-btn-xs">授权</a>
+        {{# if(d.status == 1){ }}
+            <a data-action="{:url('forbid')}?id={{d.id}}" lay-event="forbit" class="layui-btn layui-btn-xs layui-btn-danger">禁用</a>
+        {{# }else{ }}
+            <a data-action="{:url('enable')}?id={{d.id}}" lay-event="enable" class="layui-btn layui-btn-xs"  >启用</a>
+        {{# } }}
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+    </script>    
+
+{/block}
+
+{block name="script"}
+
+<script>
+layui.use('table', function(){
+    var table = layui.table
+    ,layer = layui.layer
+    ,form = layui.form
+    ,laydate=layui.laydate;
+  
+    var tableIns=table.render({
+        elem: '#table'
+        ,url:'{:url("authData")}'
+        ,cellMinWidth: 80
+        ,cols: [[
+            {type:'numbers'}
+            ,{type: 'checkbox'}
+            ,{field:'title', title:'名称', width:200}
+            ,{field:'desc', title:'描述',width:400}
+            ,{field:'status', title:'状态',width:200, templet: function(d){
+                if(d.status == 1){
+                    return '<span class="color-green">使用中</span>';
+                }else{
+                    return '<span style="color:red">已禁用</span>';
+                }
+            }}
+            ,{field:'create_at', title:'添加时间',width:200,sort: true}
+            ,{fixed: 'right', title:'操作', toolbar: '#modify'}
+        ]]
+        ,page: true
+        ,limits: [10,20,50,100]
+        ,limit:10
+    });
+
+    table.on('tool(table)',function(obj){
+        if($.inArray(obj.event,['delete','enable','forbit','apply']) == -1) return false;
+        if(obj.event == 'apply'){
+            $.get('{:url("apply")}',{id:obj.data.id},function(res){
+                if(typeof(res) == 'object' && res.code == 0){
+                    $.msg.error(res.msg);
+                    return false;
+                }
+                layer.open({
+                    type:1,
+                    area:['800px', '550px'],
+                    title:'授权',
+                    content:res
+                })                
+            });
+            return false;
+        }
+        if(obj.event == 'delete'){
+            $.msg.confirm('确定删除？',function(){
+                $.post("{:url('modify')}",{id:obj.data.id,act:obj.event},function (res) {
+                    if(res.code !== 1){
+                        $.msg.error(res.msg);
+                    }else{
+                        $.msg.success(res.msg,1,function(){
+                            table.reload('table')
+                        });
+                        
+                    }            
+                });                
+            })
+            return false;
+        }
+        $.post("{:url('modify')}",{id:obj.data.id,act:obj.event},function (res) {
+            if(res.code !== 1){
+                $.msg.error(res.msg);
+            }else{
+                $.msg.success(res.msg,1,function(){
+                    table.reload('table')
+                });
+                
+            }            
+        });
+
+    })
+
+
+});
+</script>
+{/block}

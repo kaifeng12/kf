@@ -3,6 +3,7 @@ namespace app\common\model;
 use think\Model;
 use think\Request;
 use think\Db;
+use service\Http;
 
 class Visit extends Model
 {
@@ -72,11 +73,38 @@ class Visit extends Model
             }
             return $status;
         }
-        
-        if(!$info=$this->get_info($ip)){
-            $this->where('id',1)->update(['status',501]);
-            return false;
+        try {
+            if(!$info=$this->get_info($ip)){
+                $this->where('id',1)->update(['status',501]);
+                throw new \Exception('淘宝接口出错');
+            }
+        } catch (\Exception $e) {
+            try {
+                //备用ip查询接口
+                $ret = $this->getIPInfo($ip);
+                if($ret){
+                    $forbidden=($ret['countryCode']=='CN' || $ret['country']=='中国')?0:1;
+                    $is_china=$forbidden ? 0 : 1;
+                    Db::name('ip_info')->insert([
+                        'ip'=>$ip,
+                        'adr'=>"{$ret['country']}-{$ret['regionName']}-{$ret['city']}",
+                        'isp'=>$ret['isp'],
+                        'forbidden'=>$forbidden,
+                        'is_china'=>$is_china
+                    ]);
+                    if(!$forbidden){
+                        $this->record($ip,$nodearr[0],$action);
+                    }else {
+                        return 404;
+                    }
+                }
+            } catch (\Exception $er) {
+                return 404;
+            }
+            
+            return 200;
         }
+        
         $forbidden=($info['country_id']=='CN' || $info['country']=='中国')?0:1;
         $is_china=$forbidden ? 0 : 1;
         Db::name('ip_info')->insert([
@@ -102,10 +130,18 @@ class Visit extends Model
      */
     private function get_info($ip){
         $url = "http://ip.taobao.com/service/getIpInfo.php?ip={$ip}";
-        $ret = file_get_contents($url);
+        $ret = Http::get($url);
         $arr = json_decode($ret,true);
-        ($arr['code']==0 && $arr['data']) || $arr=[];
+        ($arr['code']==0 && $arr['data']) || $arr=['data'=>[]];
         return $arr['data'];
+    }
+    
+    private function getIPInfo($ip){
+        $url = "http://ip-api.com/json/{$ip}?lang=zh-CN";
+        $ret = Http::get($url);
+        $arr = json_decode($ret,true);
+        (!empty($arr['status']) && $arr['status']=='success') || $arr=[];
+        return $arr;
     }
     
     /**

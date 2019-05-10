@@ -38,7 +38,7 @@
             </div>
             <div class="text">
                 <textarea name="content" >
-                {$logs['content']}
+                {$logs['content']|raw}
                 </textarea>
             </div>
             <button class="blue" onclick="return window.confirm('确定提交修改？')">提交修改</button>
@@ -52,8 +52,22 @@
 {/block}
 
 {block name="script"}
-<script src="__STATIC__/admin/ckeditor/ckeditor.js"></script>
-<script>
+<script src="__STATIC__/plugs/ckeditor/ckeditor.js"></script>
+
+<script type="text/javascript">
+    CKEDITOR.replace( 'content' ,{ 
+        filebrowserBrowseUrl:'__STATIC__/plugs/ckfinder/ckfinder.html',//设置上传图片的页面为ckfinder.html
+        filebrowserImageBrowseUrl:'__STATIC__/plugs/ckfinder/ckfinder.html?type=Images',
+        filebrowserFlashBrowseUrl: '__STATIC__/plugs/ckfinder/ckfinder.html?type=Flash',
+        filebrowserUploadUrl: '__STATIC__/plugs/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
+        filebrowserImageUploadUrl: '__STATIC__/plugs/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images',
+        filebrowserFlashUploadUrl: '__STATIC__/plugs/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Flash',
+        width:900,//设置默认宽度为900px
+        height:300  //设置默认高度是300px，这个高度是不包含顶部菜单的高度
+        }
+    );
+</script>
+<!-- <script>
 var static='__STATIC__';
 window.onload=function(){
     CKEDITOR.replace('content',{
@@ -74,6 +88,6 @@ window.onload=function(){
     });
 }
 
-</script>
+</script> -->
 {/block}
 

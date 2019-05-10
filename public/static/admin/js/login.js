@@ -1,7 +1,10 @@
 $().ready(function(e) {
     $(':button').bind('click',function(){
 		if($(':text:eq(1)').val()==''){
-			alert('请输入验证码');
+				layer.msg('请输入验证码！', {
+				  icon: 2,
+				  time: 2000 //2秒关闭（如果不配置，默认是3秒）
+				}); 
 			return false;
 		}
 		
@@ -17,40 +20,29 @@ $().ready(function(e) {
 		}
 		
 		//用户验证
-		var name=$(':text:eq(0)').val();
-		var pwd=$(':password').val();
-		var capt=$(':text:eq(1)').val();
-		var rem=$(':checkbox').val();
-		var data={
+		var name=$(':text:eq(0)').val(),
+		pwd=$(':password').val(),
+		capt=$(':text:eq(1)').val(),	
+		data={
 			name: name,
 			pwd : pwd,
 			capt: capt,
-			rem : rem
-		}
-		$.post(controller+'/checklogin',data,function(msg){
-			if(msg=='-1'){
-				layer.msg('验证码错误', {
+		};
+		$.post(controller+'/checklogin',data,function(res){
+			if(res.code == 0){
+				layer.msg(res.msg, {
 				  icon: 2,
 				  time: 2000 //2秒关闭（如果不配置，默认是3秒）
 				}, function(){
-				  return false;
-				});    
-				
-			}else if(msg=='0'){
-				layer.msg('用户名或密码错误！', {
-				  icon: 2,
-				  time: 2000 //2秒关闭（如果不配置，默认是3秒）
-				}, function(){
-				  return false;
-				}); 
-			}else if(msg=='1'){
+				  $('.verify').click();
+				}); 				
+			}else if(res.code == 1){
 				layer.msg('登录成功', {
 				  icon: 1,
 				  time: 1000 
 				}, function(){
 				  location.href=module+'/admin/home';
-				}); 				
-					
+				}); 
 			}
 			
 		});

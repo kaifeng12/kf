@@ -5,11 +5,28 @@ use think\Controller;
 use think\Db;
 use think\App;
 use think\captcha\Captcha;
+use app\common\model\User;
+use app\common\model\Visit;
+
 class Login extends Controller
 {
+    
+    public function initialize(){
+        $ip=$this->request->ip();
+        $visit = new Visit();
+        $visit->ip_filter($ip) == 404 && abort(404);
+    }
+    
     public function index(){
         if(session('user')){
             $this->redirect('admin/home');
+        }
+        $userInfo = cookie('usercookie');
+        if(!empty($userInfo['name']) && !empty($userInfo['pwd'])){
+            $user = new User();
+            if($user=$user->checklogin($userInfo['name'],$userInfo['pwd'],'cookie')){
+                $this->redirect('admin/home');
+            }
         }
         return $this->fetch('');  
     }
@@ -18,9 +35,9 @@ class Login extends Controller
     public function verify(){
         $config=[
             // 验证码字体大小(px)
-            'fontSize' => 14,
+            'fontSize' => 15,
             // 是否画混淆曲线
-            'useCurve' => true,
+            'useCurve' => false,
             // 验证码图片高度
             'imageH'   => 40,
             // 验证码图片宽度
@@ -37,20 +54,18 @@ class Login extends Controller
     
     //登录验证，ajax
     public function checklogin(){
-        $param=$this->request->param();
+        $param=input();
+        (empty($param['capt']) || empty($param['name']) || empty($param['pwd'])) && $this->error('参数错误'); 
         $verify=new Captcha();
         if(!$verify->check($param['capt'])){
-            echo -1;
-            exit;
+            $this->error('验证码错误');
         }
-        $ip=$this->request->ip();
-        $status=model('visit')->ip_filter($ip);
-        if($status==404) return 0;
-        if($user=model('user')->checklogin($param['name'],$param['pwd'])){
+        $user = new User();
+        if($user=$user->checklogin($param['name'],$param['pwd'])){
             //验证成功，密码正确
-            echo 1;
+            $this->success('登录成功');
         }else{
-            echo 0;
+            $this->error('用户名或密码错误');
         }
     }
 

@@ -62,7 +62,6 @@ class Wechat extends Model
         $url="https://api.weixin.qq.com/cgi-bin/user/info?access_token={$access_token}&openid={$openid}&lang=zh_CN";
         $userInfo=curl($url);
         $userInfo['nickname']=emojiEncode($userInfo['nickname']);
-        if(isset($userInfo['errcode'])) return $userInfo;
         if($id=$this->where('openid',$userInfo['openid'])->value('id')){
             $this->allowField(true)->save($userInfo,['id'=>$id]);
         }else{

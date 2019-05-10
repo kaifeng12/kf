@@ -1,0 +1,53 @@
+<form  action="{:request()->url()}" method="post" data-auto="true"  class="layui-form" style="padding-top:30px">
+
+<div class="layui-form-item">
+	<label class="layui-form-label">登录账号</label>
+	<div class="layui-input-block">
+		<input type="text" name="name" required  lay-verify="required" placeholder="请输入登录账号" autocomplete="off" class="layui-input" value='{$user.name|default=''}'>
+	</div>
+</div>
+<div class="layui-form-item">
+	<label class="layui-form-label">昵称</label>
+	<div class="layui-input-block">
+		<input type="text" name="net_name" required  lay-verify="required" placeholder="请输入昵称" autocomplete="off" class="layui-input" value='{$user.net_name|default=''}'>
+	</div>
+</div>
+<div class="layui-form-item">
+	<label class="layui-form-label">用户头像</label>
+	<div class="layui-input-block">
+		<div class="layui-upload-drag" id="head">
+<!-- 		<img src="/static/uploads/photo/cover_465a27dc95b49d6c389ec4e148acf3d9.jpg" /> -->
+			{if !empty($user.head)}
+			<img src="{$user.head}" />
+			{else/}
+		  	<i class="layui-icon"></i>
+		  	<p>点击上传，或将文件拖拽到此处</p>
+			{/if}
+
+
+		</div>
+	</div>
+</div>
+<input type="hidden" name="head" class="head" value='{$user.head|default=''}'>
+<input type="hidden" name="id" value='{$user.id|default=''}'>
+<div class="button-area">
+	<button class="layui-btn" type="submit">提交</button>
+</div>
+</form>
+
+<script type="text/javascript">
+
+	var upload = layui.upload,$=layui.$; 
+
+	//拖拽上传
+	upload.render({
+		elem: '#head'
+		,url: '{:url('upload_face')}'
+		,field:'head'
+		,done: function(res){
+			console.log(res);
+	  		$('#head').html('<img src="'+res.data.head+'" />');
+	  		$('.head').val(res.data.head)
+		}
+	});
+</script>

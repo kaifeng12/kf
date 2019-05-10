@@ -81,13 +81,13 @@ layui.use('table', function(){
     ,cols: [[
       {type:'numbers'}
       ,{type: 'checkbox'}
-      ,{field:'id', title:'ID', width:50, sort: true}
+      ,{field:'id', title:'ID', width:100, sort: true}
       ,{field:'ip', title:'ip地址', templet: '#usernameTpl'}
       ,{field:'adr', title:'地理信息'}
       ,{field:'isp', title:'运营商'}
       ,{field:'module', title:'访问模块'}
       ,{field:'node', title:'访问节点'}
-      ,{field:'time', title:'访问次数',sort: true}      
+      ,{field:'time', title:'访问次数',width:100,sort: true}      
       ,{field:'status', title:'最后访问状态'}
       ,{field:'date', title:'最后访问时间',sort: true}           
       ,{field:'forbidden', title:'是否屏蔽', width:110, templet: '#checkboxTpl', unresize: true}

@@ -1,4 +1,11 @@
-var layer=layui.layer;
+if (typeof layui !== 'undefined') {
+    var form = layui.form,
+        layer = layui.layer,
+        laydate = layui.laydate;
+    if (typeof jQuery === 'undefined') {
+        var $ = jQuery = layui.$;
+    }
+}
 
     /*! 消息组件实例 */
     $.msg = new function () {

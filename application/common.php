@@ -145,3 +145,10 @@ function emojiDecode($content)
         return '\\';
     }, json_encode($content)));
 }
+
+function auth($node)
+{
+    $auth = model('auth');
+    return $auth->checkAuth($node);
+}
+
